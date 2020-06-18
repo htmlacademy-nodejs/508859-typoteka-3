@@ -1,7 +1,7 @@
 # Личный проект «Типотека» [![Build status][travis-image]][travis-url]
 
 * Студент: [Илья Колмаков](https://up.htmlacademy.ru/nodejs/3/user/508859).
-* Наставник: `Неизвестно`.
+* Наставник: [Владимир Коршунов](https://up.htmlacademy.ru/nodejs/3/user/83596).
 
 ---
 
