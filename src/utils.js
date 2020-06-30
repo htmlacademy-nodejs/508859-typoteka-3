@@ -19,7 +19,7 @@ const getRandomInt = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-const shuffle = (array) => {
+const shuffleElements = (array) => {
   const cloneArray = [...array];
   for (let i = cloneArray.length - 1; i > 0; i--) {
     const randomPosition = Math.floor(Math.random() * i);
@@ -46,6 +46,6 @@ const getPublishDate = () => {
 
 module.exports = {
   getRandomInt,
-  shuffle,
+  shuffleElements,
   getPublishDate
 };
