@@ -3,11 +3,10 @@
 const fs = require(`fs`).promises;
 const chalk = require(`chalk`);
 
-const {getRandomInt, shuffle, getPublishDate} = require(`../../utils`);
-const {ExitCode} = require(`../../constants`);
+const {getRandomInt, shuffleElements, getPublishDate} = require(`../../utils`);
+const {FILE_NAME, ExitCode} = require(`../../constants`);
 
 const DEFAULT_COUNT = 1;
-const FILE_NAME = `mocks.json`;
 const FILE_TITLES_PATH = `./src/data/titles.txt`;
 const FILE_SENTENCES_PATH = `./src/data/sentences.txt`;
 const FILE_CATEGORIES_PATH = `./src/data/categories.txt`;
@@ -31,10 +30,10 @@ const readContent = async (filePath) => {
 const generateOffers = (count, titles, sentences, categories) => (
   Array(count).fill({}).map(() => ({
     title: titles[getRandomInt(0, titles.length - 1)],
-    announce: shuffle(sentences).slice(DescriptionCount.MIN, DescriptionCount.MAX).join(` `),
-    fullText: shuffle(sentences).slice(0, getRandomInt(0, sentences.length - 1)).join(` `),
+    announce: shuffleElements(sentences).slice(DescriptionCount.MIN, DescriptionCount.MAX).join(` `),
+    fullText: shuffleElements(sentences).slice(0, getRandomInt(0, sentences.length - 1)).join(` `),
     createdDate: getPublishDate(),
-    category: shuffle(categories).slice(0, getRandomInt(1, categories.length - 1)),
+    category: shuffleElements(categories).slice(0, getRandomInt(1, categories.length - 1)),
   }))
 );
 
