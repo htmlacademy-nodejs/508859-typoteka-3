@@ -4,10 +4,11 @@
   "description": "Типотека",
   "main": "./src/service/service.js",
   "scripts": {
-    "test": "npm run eslint",
     "eslint": "eslint --ext .js src/",
     "start": "node ./src/service/service.js",
-    "start.dev": "nodemon ./src/service/service.js"
+    "start.dev": "nodemon ./src/service/service.js",
+    "start-front-server": "node ./src/express/index.js",
+    "test": "npm run eslint"
   },
   "repository": {
     "type": "git",
@@ -25,6 +26,7 @@
     "nodemon": "2.0.4"
   },
   "dependencies": {
-    "chalk": "4.1.0"
+    "chalk": "4.1.0",
+    "express": "4.17.1"
   }
 }

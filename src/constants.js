@@ -1,6 +1,7 @@
 'use strict';
 
 const FILE_NAME = `mocks.json`;
+const DEFAULT_PORT = 8080;
 
 const ExitCode = {
   SUCCESS: 0,
@@ -15,8 +16,10 @@ const HttpCode = {
   UNAUTHORIZED: 401,
 };
 
+
 module.exports = {
   FILE_NAME,
+  DEFAULT_PORT,
   ExitCode,
   HttpCode
 };
