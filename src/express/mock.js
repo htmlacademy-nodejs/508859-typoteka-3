@@ -1,8 +1,39 @@
 'use strict';
 
 const pageContentMain = {
-  isAuth: false,
+  isAuth: true,
   title: `Типотека`,
+  page: `main`,
+  categories: [
+    {
+      name: `Автомобили`,
+      count: 88
+    },
+    {
+      name: `Удаленная работа`,
+      count: 13
+    },
+    {
+      name: `Бизнес`,
+      count: 13
+    },
+    {
+      name: `Путешествия`,
+      count: 13
+    },
+    {
+      name: `Дизайн и обустройство`,
+      count: 13
+    },
+    {
+      name: `Производство игрушек`,
+      count: 22
+    },
+    {
+      name: `UX & UI`,
+      count: 22
+    }
+  ],
   discussedList: [
     {
       text: `Билл Гейтс впервые за два года возглавил рейтинг самых богатых людей мира по версии Bloomberg`,
@@ -120,6 +151,122 @@ const pageContentMain = {
   ]
 };
 
+const pageContentPost = {
+  page: `post`,
+  title: `AirPods в один клик`,
+  datetime: `21.03.2019, 20:33`,
+  headerPost: `Бирюзовое доверие`,
+  textArray: [
+    `У Apple иногда попадаются интерфейсы, за которые создателей хочется сильно
+    поругать
+    — к примеру интерфейс
+    публикации приложения в AppStore, для которого я уже неделю восстановливаю свой аккаунт разработчика.`,
+    `Или интерфейс подключения AirPods на макбуке. Чтобы переключить наушники между
+    телефоном и компьютером,
+    нужно сначала нажать на значок звука, затем дождаться, когда в списке устройств появятся наушники, потом
+    нажать на них и дождаться, пока случится вся магия подключения. Иногда по загадочным причинам магия не
+    случается, и операцию нужно повторить, выполняя все те же клики-ожидания-клики — бесит.`
+  ],
+  img: {
+    postImg: `/img/sea-fullsize@1x.jpg`,
+    postAlt: `пейзаж море, скалы, пляж`
+  },
+  categories: [
+    {
+      name: `Автомобили`,
+      count: 88
+    },
+    {
+      name: `Удаленная работа`,
+      count: 13
+    },
+    {
+      name: `Бизнес`,
+      count: 13
+    }
+  ],
+  comments: [
+    {
+      commentUser: {
+        name: `Евгений Петров`,
+        avatar: `/img/avatar-1.png`
+      },
+      text: `Автор, ты все выдумал, покайся`,
+      datetime: `21.03.2019, 20:33`,
+    },
+    {
+      commentUser: {
+        name: `Александр Марков`,
+        avatar: `/img/avatar-5.png`
+      },
+      text: `Конечно, прежде чем так писать, нужно
+      искренне
+      приложить усилия, чтобы разобраться — не все люди умеют выражать свои мысли.`,
+      datetime: `21.03.2019, 20:33`,
+    },
+    {
+      commentUser: {
+        name: `Евгений Петров`,
+        avatar: `/img/avatar-4.png`
+      },
+      text: `Автор, ты все выдумал, покайся`,
+      datetime: `21.03.2019, 20:33`,
+    },
+    {
+      commentUser: {
+        name: `Александр Марков`,
+        avatar: `/img/avatar-3.png`
+      },
+      text: `Конечно, прежде чем так писать, нужно
+      искренне приложить усилия, чтобы разобраться — не все люди умеют выражать свои мысли.`,
+      datetime: `21.03.2019, 20:33`,
+    }
+  ]
+};
+
+const pageContentAllCategories = {
+  page: `all-categories`,
+  isAuth: true,
+  categories: [
+    {
+      id: 1,
+      name: `Жизнь и путешествия`
+    },
+    {
+      id: 2,
+      name: `Путешествия`
+    },
+    {
+      id: 3,
+      name: `Дизайн и программирование`
+    },
+    {
+      id: 4,
+      name: `Другое`
+    },
+    {
+      id: 5,
+      name: `Личное`
+    }
+  ]
+};
+
+const pageContentNewPost = {
+  page: `new-post`,
+  isAuth: true,
+  title: `new publication`
+};
+
+const pageContentEditPost = {
+  page: `new-post`,
+  isAuth: true,
+  title: `new publication`
+};
+
 module.exports = {
-  pageContentMain
+  pageContentMain,
+  pageContentPost,
+  pageContentAllCategories,
+  pageContentNewPost,
+  pageContentEditPost
 };

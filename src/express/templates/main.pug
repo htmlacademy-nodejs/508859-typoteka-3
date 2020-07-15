@@ -6,7 +6,9 @@ block content
       h1.visually-hidden Главная страница личного блога Типотека
       p
         | Это приветственный текст, который владелец блога может выбрать, чтобы описать себя 👏
-      include partials/categories.pug
+      section.main-page__theme-list
+        h2.visually-hidden Список тем
+        include partials/categories.pug
       .main-page__section-flex
         section.main-page__hot.hot
           h2.hot__name(class=discussedList.length ? '' : 'hot__name--empty')
@@ -91,7 +93,7 @@ block content
                     img.preview__background-image(src=post.img.backgrounds.src1, width='460', height='240', srcset=post.img.backgrounds.src2, alt=post.img.imgText)
                 time.preview__time(datetime='2019-03-21T20:33')=post.datetime
                 h3.preview__name
-                  a.preview__name-link(href='#')=post.title
+                  a.preview__name-link(href='/articles/1')=post.title
                 p.preview__text=post.previewText
                 a.preview__comment(href='#')
                   | Комментарии
@@ -108,7 +110,7 @@ block content
                     img.preview__background-image(src=post.img.backgrounds.src1, width='460', height='240', srcset=post.img.backgrounds.src2, alt=post.img.imgText)
                 time.preview__time(datetime='2019-03-21T20:33')=post.datetime
                 h3.preview__name
-                  a.preview__name-link(href='#')=post.title
+                  a.preview__name-link(href='/articles/1')=post.title
                 p.preview__text=post.previewText
                 a.preview__comment(href='#')
                   | Комментарии

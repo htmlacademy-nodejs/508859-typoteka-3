@@ -1,7 +1,7 @@
 'use strict';
 
 const {Router} = require(`express`);
-const {pageContentMain} = require(`../mock`);
+const {pageContentMain, pageContentAllCategories} = require(`../mock`);
 
 const mainRouter = new Router();
 
@@ -24,7 +24,7 @@ mainRouter.get(`/search`, (req, res) => {
 });
 
 mainRouter.get(`/categories`, (req, res) => {
-  res.send(`/categories`);
+  res.render(`all-categories`, pageContentAllCategories);
 });
 
 module.exports = mainRouter;
