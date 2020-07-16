@@ -62,14 +62,14 @@ const pageContentMain = {
     },
     {
       author: `Александр Петров`,
-      avatar: `img/avatar-small-2.png`,
+      avatar: `/img/avatar-small-2.png`,
       text: `Главреды «Дождя», Forbes и других СМИ попросили Роскомнадзор
         разъяснить штрафы за ссылки на
         сайты с матом`
     },
     {
       author: `Игорь Шманский`,
-      avatar: `img/avatar-small-3.png`,
+      avatar: `/img/avatar-small-3.png`,
       text: `Что-то все электрокары в последнее время все на одно лицо
         делаются))`
     }
@@ -79,8 +79,8 @@ const pageContentMain = {
       breadcrumbs: [`Дизайн`, `Удаленная работа`],
       img: {
         backgrounds: {
-          src1: `img/skyscraper@1x.jpg`,
-          src2: `img/skyscraper@1x.jpg 1x, img/skyscraper@2x.jpg 2x`
+          src1: `/img/skyscraper@1x.jpg`,
+          src2: `/img/skyscraper@1x.jpg 1x, img/skyscraper@2x.jpg 2x`
         },
         imgText: `Фотография небоскреба`
       },
@@ -94,8 +94,8 @@ const pageContentMain = {
       breadcrumbs: [`Фриланс`],
       img: {
         backgrounds: {
-          src1: `img/sea@1x.jpg`,
-          src2: `img/sea@1x.jpg 1x, img/sea@2x.jpg 2x`
+          src1: `/img/sea@1x.jpg`,
+          src2: `/img/sea@1x.jpg 1x, img/sea@2x.jpg 2x`
         },
         imgText: `Фотография моря`
       },
@@ -109,8 +109,8 @@ const pageContentMain = {
       breadcrumbs: [`Фриланс`],
       img: {
         backgrounds: {
-          src1: `img/sea@1x.jpg`,
-          src2: `img/sea@1x.jpg 1x, img/sea@2x.jpg 2x`
+          src1: `/img/sea@1x.jpg`,
+          src2: `/img/sea@1x.jpg 1x, img/sea@2x.jpg 2x`
         },
         imgText: `Фотография моря`
       },
@@ -137,8 +137,8 @@ const pageContentMain = {
       breadcrumbs: [`Дизайн`],
       img: {
         backgrounds: {
-          src1: `img/forest@1x.jpg`,
-          src2: `img/forest@1x.jpg 1x, img/forest@2x.jpg 2x`
+          src1: `/img/forest@1x.jpg`,
+          src2: `/img/forest@1x.jpg 1x, img/forest@2x.jpg 2x`
         },
         imgText: `Фотография леса`
       },
@@ -254,13 +254,134 @@ const pageContentAllCategories = {
 const pageContentNewPost = {
   page: `new-post`,
   isAuth: true,
-  title: `new publication`
+  isEdit: false,
+  title: `new publication`,
+  post: {
+    header: ``,
+    img: ``,
+    datetime: `21.03.2019`,
+    categories: [],
+    text: ``,
+    fullText: ``
+  }
 };
 
 const pageContentEditPost = {
   page: `new-post`,
   isAuth: true,
-  title: `new publication`
+  isEdit: true,
+  title: `new publication`,
+  post: {
+    header: `Как правильно заводить машину`,
+    img: `moya_mashinka.jpg`,
+    datetime: `21.03.2019`,
+    categories: [
+      {
+        name: `Автомобили`
+      }
+    ],
+    text: `Материнский холдинг возглавит гендиректор Google Сундар Пичаи. При этом больше половины голосов в компании останется у Пейджа и Брина.`,
+    fullText: `Основатели Google Ларри Пейдж и Сергей Брин отойдут от руководства материнским холдингом Alphabet, сказано в сообщении компании. Пейдж занимал пост гендиректора, а Брин — президента Alphabet. Alphabet возглавит гендиректор Google Сундар Пичаи, он также продолжит руководить Google. Должность президента холдинга будет упразднена.`
+  }
+};
+
+const pageContentCategory = {
+  page: `articles-by-category`,
+  isAuth: true,
+  title: `Типотека`,
+  categories: [
+    {
+      name: `Автомобили`,
+      count: 88
+    },
+    {
+      name: `Удаленная работа`,
+      count: 13
+    },
+    {
+      name: `Бизнес`,
+      count: 13,
+      isActive: true
+    },
+    {
+      name: `Путешествия`,
+      count: 13
+    },
+    {
+      name: `Дизайн и обустройство`,
+      count: 13
+    },
+    {
+      name: `Производство игрушек`,
+      count: 22
+    },
+    {
+      name: `UX & UI`,
+      count: 22
+    }
+  ],
+  postList: [
+    {
+      breadcrumbs: [`Дизайн`],
+      img: {
+        backgrounds: {
+          src1: `/img/skyscraper@1x.jpg`,
+          src2: `/img/skyscraper@1x.jpg 1x, img/skyscraper@2x.jpg 2x`
+        },
+        imgText: `Фотография небоскреба`
+      },
+      datetime: `21.03.2019, 20:33`,
+      title: `Я ничего не понял`,
+      previewText: `Если вы сами пишете такие письма — почитайте Ильяхова.
+        А в этой заметке я расскажу про заклинание, которое от таких писем помогает.`,
+      commentCount: 12
+    },
+    {
+      breadcrumbs: [`Фриланс`],
+      img: {
+        backgrounds: {
+          src1: `/img/sea@1x.jpg`,
+          src2: `/img/sea@1x.jpg 1x, img/sea@2x.jpg 2x`
+        },
+        imgText: `Фотография моря`
+      },
+      datetime: `21.03.2019, 20:33`,
+      title: `Путешествие в Голландию`,
+      previewText: `Если вы сами пишете такие письма — почитайте Ильяхова.
+        А в этой заметке я расскажу про заклинание, которое от таких писем помогает.`,
+      commentCount: 12
+    },
+    {
+      breadcrumbs: [`Фриланс`],
+      img: {
+        backgrounds: {
+          src1: `/img/sea@1x.jpg`,
+          src2: `/img/sea@1x.jpg 1x, img/sea@2x.jpg 2x`
+        },
+        imgText: `Фотография моря`
+      },
+      datetime: `21.03.2019, 20:33`,
+      title: `Путешествие в Голландию`,
+      previewText: `Если вы сами пишете такие письма — почитайте Ильяхова.
+        А в этой заметке я расскажу про заклинание, которое от таких писем помогает.`,
+      commentCount: 12
+    },
+    {
+      breadcrumbs: [`Дизайн`],
+      img: {
+        backgrounds: {
+          src1: `/img/forest@1x.jpg`,
+          src2: `/img/forest@1x.jpg 1x, img/forest@2x.jpg 2x`
+        },
+        imgText: `Фотография леса`
+      },
+      datetime: `21.03.2019, 20:33`,
+      title: `Я понял, но не все`,
+      previewText: `Если вы сами пишете такие письма — почитайте Ильяхова.
+        А в этой заметке я расскажу про заклинание, которое от таких писем помогает.`,
+      commentCount: 12
+    }
+  ]
 };
 
 module.exports = {
@@ -268,5 +389,6 @@ module.exports = {
   pageContentPost,
   pageContentAllCategories,
   pageContentNewPost,
-  pageContentEditPost
+  pageContentEditPost,
+  pageContentCategory
 };

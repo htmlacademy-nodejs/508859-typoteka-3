@@ -1,7 +1,7 @@
 ul.themes(class=(page == 'post') ? 'post__themes' : '')
-  each category in categories
+  each category, key in categories
     li.themes__item
-      a.themes__item-link(href='#')=category.name
+      a.themes__item-link(class=(category.isActive ? 'themes__item-link--active' : '') href=('/articles/category/' + key))=category.name
         | &nbsp;
         sup=category.count
       if page == 'post'

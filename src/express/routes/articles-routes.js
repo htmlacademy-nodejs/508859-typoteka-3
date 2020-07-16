@@ -1,7 +1,7 @@
 'use strict';
 
 const {Router} = require(`express`);
-const {pageContentPost, pageContentNewPost, pageContentEditPost} = require(`../mock`);
+const {pageContentPost, pageContentNewPost, pageContentEditPost, pageContentCategory} = require(`../mock`);
 
 const mainRouter = new Router();
 
@@ -14,7 +14,7 @@ mainRouter.get(`/edit/:id`, (req, res) => {
 });
 
 mainRouter.get(`/category/:id`, (req, res) => {
-  res.send(`/articles/category/${req.params.id}`);
+  res.render(`articles/articles-by-category`, pageContentCategory);
 });
 
 mainRouter.get(`/:id`, (req, res) => {
