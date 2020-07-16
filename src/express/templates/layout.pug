@@ -1,5 +1,5 @@
 include partials/meta.pug
-.wrapper(class=(page == 'all-categories' ? 'wrapper--nobackground' : ''))
+.wrapper(class=(page == 'all-categories' || page == 'my' || page == 'comments' ? 'wrapper--nobackground' : ''))
   include partials/header.pug
   block content
   include partials/footer.pug
