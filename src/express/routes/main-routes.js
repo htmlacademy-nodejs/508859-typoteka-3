@@ -1,7 +1,13 @@
 'use strict';
 
 const {Router} = require(`express`);
-const {pageContentMain, pageContentAllCategories} = require(`../mock`);
+const {
+  pageContentMain,
+  pageContentAllCategories,
+  pageContentSearch,
+  pageContentRegister,
+  pageContentLogin
+} = require(`../mock`);
 
 const mainRouter = new Router();
 
@@ -10,17 +16,15 @@ mainRouter.get(`/`, (req, res) => {
 });
 
 mainRouter.get(`/register`, (req, res) => {
-  res.render(`auth/sign-up`);
+  res.render(`auth/sign-up`, pageContentRegister);
 });
 
 mainRouter.get(`/login`, (req, res) => {
-  res.render(`auth/login`);
+  res.render(`auth/login`, pageContentLogin);
 });
 
 mainRouter.get(`/search`, (req, res) => {
-  res.render(`search`, {
-    isAuth: false
-  });
+  res.render(`search`, pageContentSearch);
 });
 
 mainRouter.get(`/categories`, (req, res) => {

@@ -156,6 +156,7 @@ const pageContentPost = {
   title: `AirPods в один клик`,
   datetime: `21.03.2019, 20:33`,
   headerPost: `Бирюзовое доверие`,
+  isAuth: true,
   textArray: [
     `У Apple иногда попадаются интерфейсы, за которые создателей хочется сильно
     поругать
@@ -469,6 +470,43 @@ const pageContentMyComments = {
   ]
 };
 
+const pageContentSearch = {
+  page: `search`,
+  isAuth: true,
+  title: `Типотека`,
+  searchWord: `Путешешствия`,
+  searchList: [
+    {
+      datetime: `21.03.2019, 20:33`,
+      text: `Huawei открыла в России <b>путешествия</b> на смартфон Mate 30 Pro без сервисов Google`
+    },
+    {
+      datetime: `21.03.2019, 20:33`,
+      text: `«Яндекс.Метрика» запустила <b>путешествия</b> сервис для оценки эффективности
+      баннеров и видеорекламы в реальном времени`
+    }
+  ]
+};
+
+const pageContentRegister = {
+  errorList: [
+    // `Пароль не может состоять из двух букв`,
+    // `Фамилия не должна быть смешной`
+  ],
+  errorLogin: {
+    errorEmail: false,
+    errorPassword: false
+  }
+};
+
+const pageContentLogin = {
+  errorList: [],
+  errorLogin: {
+    errorEmail: false,
+    errorPassword: false
+  }
+};
+
 module.exports = {
   pageContentMain,
   pageContentPost,
@@ -477,5 +515,8 @@ module.exports = {
   pageContentEditPost,
   pageContentCategory,
   pageContentMy,
-  pageContentMyComments
+  pageContentMyComments,
+  pageContentSearch,
+  pageContentRegister,
+  pageContentLogin
 };
