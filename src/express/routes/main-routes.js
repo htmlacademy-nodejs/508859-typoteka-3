@@ -1,26 +1,34 @@
 'use strict';
 
 const {Router} = require(`express`);
+const {
+  pageContentMain,
+  pageContentAllCategories,
+  pageContentSearch,
+  pageContentRegister,
+  pageContentLogin
+} = require(`../mock`);
+
 const mainRouter = new Router();
 
 mainRouter.get(`/`, (req, res) => {
-  res.send(`/`);
+  res.render(`main`, pageContentMain);
 });
 
 mainRouter.get(`/register`, (req, res) => {
-  res.send(`/register`);
+  res.render(`auth/sign-up`, pageContentRegister);
 });
 
 mainRouter.get(`/login`, (req, res) => {
-  res.send(`/login`);
+  res.render(`auth/login`, pageContentLogin);
 });
 
 mainRouter.get(`/search`, (req, res) => {
-  res.send(`/search`);
+  res.render(`search`, pageContentSearch);
 });
 
 mainRouter.get(`/categories`, (req, res) => {
-  res.send(`/categories`);
+  res.render(`all-categories`, pageContentAllCategories);
 });
 
 module.exports = mainRouter;
