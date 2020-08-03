@@ -1,6 +1,6 @@
 'use strict';
 
-const FILE_NAME = `mocks.json`;
+const FILE_NAME = `mock.json`;
 const DEFAULT_PORT = 8080;
 
 const ExitCode = {
