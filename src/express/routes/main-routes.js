@@ -11,24 +11,24 @@ const {
 
 const mainRouter = new Router();
 
-mainRouter.get(`/`, (req, res) => {
-  res.render(`main`, pageContentMain);
+mainRouter.get(`/`, (request, response) => {
+  response.render(`main`, pageContentMain);
 });
 
-mainRouter.get(`/register`, (req, res) => {
-  res.render(`auth/sign-up`, pageContentRegister);
+mainRouter.get(`/register`, (request, response) => {
+  response.render(`auth/sign-up`, pageContentRegister);
 });
 
-mainRouter.get(`/login`, (req, res) => {
-  res.render(`auth/login`, pageContentLogin);
+mainRouter.get(`/login`, (request, response) => {
+  response.render(`auth/login`, pageContentLogin);
 });
 
-mainRouter.get(`/search`, (req, res) => {
-  res.render(`search`, pageContentSearch);
+mainRouter.get(`/search`, (request, response) => {
+  response.render(`search`, pageContentSearch);
 });
 
-mainRouter.get(`/categories`, (req, res) => {
-  res.render(`all-categories`, pageContentAllCategories);
+mainRouter.get(`/categories`, (request, response) => {
+  response.render(`all-categories`, pageContentAllCategories);
 });
 
 module.exports = mainRouter;

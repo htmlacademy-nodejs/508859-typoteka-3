@@ -14,4 +14,5 @@ node_modules/
 # Папка с собранными файлами проекта
 build/
 
-mock.json
+mocks.json
+requests.http
