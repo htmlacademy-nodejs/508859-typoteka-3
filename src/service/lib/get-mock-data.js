@@ -4,6 +4,16 @@ const fs = require(`fs`).promises;
 const chalk = require(`chalk`);
 const {FILE_NAME} = require(`../../constants`);
 let data = null;
+let fileData;
+
+fs.access(`./${FILE_NAME}`)
+  .then(async () => {
+    fileData = await fs.readFile(`./${FILE_NAME}`);
+  })
+  .catch(async () => {
+    fileData = JSON.stringify([]);
+    await fs.writeFile(`./${FILE_NAME}`, fileData);
+  });
 
 const getMockData = async () => {
   if (data !== null) {

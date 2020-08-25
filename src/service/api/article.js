@@ -101,5 +101,4 @@ module.exports = (app, articleService, commentService) => {
     return response.status(HttpCode.CREATED)
       .json(comment);
   });
-
 };
