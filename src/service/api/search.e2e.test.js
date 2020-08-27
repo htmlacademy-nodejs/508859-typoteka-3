@@ -8,7 +8,7 @@ const {HttpCode} = require(`../../constants`);
 describe(`Search API end-points`, () => {
   test(`When get search status code should be 200`, async (done) => {
     const response = await request(app).get(encodeURI(`/api/search?query=квадрокоптер`));
-    expect(response.statusCode).toBe(200);
+    expect(response.statusCode).toBe(HttpCode.OK);
     done();
   });
 
