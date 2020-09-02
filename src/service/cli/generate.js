@@ -4,8 +4,10 @@ const fs = require(`fs`).promises;
 const chalk = require(`chalk`);
 const {nanoid} = require(`nanoid`);
 
-const {getRandomInt, shuffleElements, getPublishDate} = require(`../../utils`);
+const {getRandomInt, shuffleElements, getPublishDate} = require(`../../utils/utils`);
 const {FILE_NAME, MAX_ID_LENGTH, ExitCode} = require(`../../constants`);
+const {getLogger} = require(`../../utils/logger`);
+const logger = getLogger();
 
 const DEFAULT_COUNT = 1;
 const FILE_TITLES_PATH = `./src/data/titles.txt`;
@@ -33,8 +35,10 @@ const CommentTextCount = {
 const readContent = async (filePath) => {
   try {
     const content = await fs.readFile(filePath, `utf8`);
+    logger.info(`file:reader Read file success`);
     return content.split(`\n`).filter((data) => data !== ``);
   } catch (error) {
+    logger.error(`file:reader Read file error - ${error}`);
     console.error(chalk.red(error));
     return [];
   }
@@ -81,8 +85,10 @@ module.exports = {
 
     try {
       await fs.writeFile(FILE_NAME, content);
+      logger.info(`file:reader File created`);
       console.info(chalk.green(`Operation success. File created.`));
     } catch (error) {
+      logger.error(`file:reader Can't write data to file - ${error}`);
       console.error(chalk.red(`Can't write data to file...`));
     }
   }
