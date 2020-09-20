@@ -2,6 +2,7 @@
 
 const path = require(`path`);
 const express = require(`express`);
+const formidableMiddleware = require(`express-formidable`);
 
 const {getLogger} = require(`../utils/logger`);
 const logger = getLogger();
@@ -19,6 +20,12 @@ const PUBLIC_DIR = `public`;
 
 const app = express();
 
+app.use(formidableMiddleware({
+  encoding: `utf-8`,
+  uploadDir: `./tmp`,
+  multiples: false,
+}));
+// app.use(express.urlencoded({extended: false}));
 app.use(express.static(path.resolve(__dirname, PUBLIC_DIR)));
 app.set(`views`, path.resolve(__dirname, `templates`));
 app.set(`view engine`, `pug`);

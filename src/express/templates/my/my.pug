@@ -8,6 +8,6 @@ block content
         each post in postList
           li.notes__list-item(class=(postList[postList.length - 1] == post) ? 'notes__list-item--last' : '')
             time.notes__item-time(datetime='2019-03-21T20:33')=post.datetime
-            a.notes__item-text(href='#')=post.text
+            a.notes__item-text(href=('/articles/edit/' + post.id))=post.previewText
             button.notes__button.button.button--close-item(type='button')
               span.visually-hidden Закрыть строку списка

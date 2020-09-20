@@ -19,7 +19,7 @@ const MAX_COUNT_OFFERS = 1000;
 
 const DescriptionCount = {
   MIN: 1,
-  MAX: 5
+  MAX: 2
 };
 
 const CommentCount = {
@@ -62,6 +62,12 @@ const generateComments = (count, comments) => (
     text: shuffleElements(comments)
       .slice(CommentTextCount.MIN, CommentTextCount.MAX)
       .join(` `),
+    name: `Александр Петров`,
+    img: `/img/avatar-small-2.png`,
+    datetime: `21.03.2019, 20:33`,
+    fullText: shuffleElements(comments)
+      .slice(CommentTextCount.MIN, CommentTextCount.MAX)
+      .join(` `)
   }))
 );
 

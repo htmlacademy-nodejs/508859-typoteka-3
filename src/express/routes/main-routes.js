@@ -7,42 +7,57 @@ const {getLogger} = require(`../../utils/logger`);
 const logger = getLogger();
 
 const {
-  pageContentMain,
   pageContentAllCategories,
-  pageContentSearch,
+  // pageContentSearch,
   pageContentRegister,
   pageContentLogin
 } = require(`../mock`);
 
-const mainAdapter = require(`../adapters/mainAdapter`);
+const {getMainAdapter, getSearchAdapter} = require(`../adapters`);
 
 const mainRouter = new Router();
 
-mainRouter.get(`/`, (_request, response) => {
-  logger.info(`client:routes End request with status code ${response.statusCode}`);
+mainRouter.get(`/`, (req, res) => {
+  logger.info(`client:routes End request with status code ${res.statusCode}`);
   request(`http://localhost:3000/api/articles`, {json: true})
-    .then((content) => response.render(`main`, mainAdapter(content)))
+    .then((content) => res.render(`main`, getMainAdapter(content)))
     .catch((error) => logger.error(`client:request End request with error: ${error}`));
 });
 
-mainRouter.get(`/register`, (_request, response) => {
-  logger.info(`client:routes End request with status code ${response.statusCode}`);
-  response.render(`auth/sign-up`, pageContentRegister);
+mainRouter.get(`/register`, (req, res) => {
+  logger.info(`client:routes End request with status code ${res.statusCode}`);
+  res.render(`auth/sign-up`, pageContentRegister);
 });
 
-mainRouter.get(`/login`, (_request, response) => {
-  logger.info(`client:routes End request with status code ${response.statusCode}`);
-  response.render(`auth/login`, pageContentLogin);
+mainRouter.get(`/login`, (req, res) => {
+  logger.info(`client:routes End request with status code ${res.statusCode}`);
+  res.render(`auth/login`, pageContentLogin);
 });
 
-mainRouter.get(`/search`, (_request, response) => {
-  logger.info(`client:routes End request with status code ${response.statusCode}`);
-  response.render(`search`, pageContentSearch);
+mainRouter.get(`/search`, (req, res) => {
+  logger.info(`client:routes End request with status code ${res.statusCode}`);
+  res.render(`search`, getSearchAdapter([]));
 });
 
-mainRouter.get(`/categories`, (_request, response) => {
-  logger.info(`client:routes End request with status code ${response.statusCode}`);
-  response.render(`all-categories`, pageContentAllCategories);
+mainRouter.post(`/search`, (req, res) => {
+  logger.info(`client:routes End request with status code ${res.statusCode}`);
+  const options = {
+    uri: `http://localhost:3000/api/search`,
+    // method: `POST`,
+    json: true,
+    body: {query: req.fields.query},
+    headers: {
+      'Content-Type': `application/json`
+    }
+  };
+  request(options)
+    .then((content) => res.render(`search`, getSearchAdapter(content)))
+    .catch((error) => logger.error(`client:request End request with error: ${error}`));
+});
+
+mainRouter.get(`/categories`, (req, res) => {
+  logger.info(`client:routes End request with status code ${res.statusCode}`);
+  res.render(`all-categories`, pageContentAllCategories);
 });
 
 module.exports = mainRouter;

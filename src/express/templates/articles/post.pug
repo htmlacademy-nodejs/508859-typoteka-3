@@ -12,16 +12,16 @@ block content
             time.post__date(datetime='2019-03-21T20:33')=datetime
             h2.post__title.title.title--main=title
             include ../partials/categories.pug
-          if img.postImg
+          if img.full.backgrounds.src1
             .post__picture
-              img(src=img.postImg, alt=img.postAlt)
+              img(src=img.full.backgrounds.src1, alt=img.full.imgAlt)
           .post__text
             h3=headerPost
-            each text in textArray
-              p=text
+            //- each text in textArray
+            p=fullText
       .post__wrapper.post__wrapper--comments
         section.post__comments.comments
-          if comments.length
+          if commentCount
             h2.comments__title.title.title--middle Комментарии
             ul.comments__list
               each comment in comments
