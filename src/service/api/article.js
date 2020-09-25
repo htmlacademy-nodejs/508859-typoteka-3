@@ -37,9 +37,6 @@ module.exports = (app, articleService, commentService) => {
 
     logger.info(`server:api Create article`);
 
-    // response.setHeader(`Content-Type`, `aplication/json`);
-    // response.redirect(301, `/my`);
-
     return response.status(HttpCode.CREATED)
       .json(article);
   });

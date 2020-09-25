@@ -318,11 +318,20 @@ const pageContentCategory = {
     {
       categories: [`Дизайн`],
       img: {
-        backgrounds: {
-          src1: `/img/skyscraper@1x.jpg`,
-          src2: `/img/skyscraper@1x.jpg 1x, img/skyscraper@2x.jpg 2x`
+        preview: {
+          backgrounds: {
+            src1: `/img/skyscraper@1x.jpg`,
+            src2: `/img/skyscraper@1x.jpg 1x, img/skyscraper@2x.jpg 2x`
+          },
+          imgAlt: `Фотография леса`,
         },
-        imgText: `Фотография небоскреба`
+        full: {
+          backgrounds: {
+            src1: `/img/sea-fullsize@1x.jpg`,
+            src2: ``
+          },
+          imgAlt: `Фотография небоскреба`
+        }
       },
       datetime: `21.03.2019, 20:33`,
       title: `Я ничего не понял`,
@@ -333,11 +342,20 @@ const pageContentCategory = {
     {
       categories: [`Фриланс`],
       img: {
-        backgrounds: {
-          src1: `/img/sea@1x.jpg`,
-          src2: `/img/sea@1x.jpg 1x, img/sea@2x.jpg 2x`
+        preview: {
+          backgrounds: {
+            src1: `/img/sea@1x.jpg`,
+            src2: `/img/sea@1x.jpg 1x, img/sea@2x.jpg 2x`
+          },
+          imgAlt: `Фотография моря`
         },
-        imgText: `Фотография моря`
+        full: {
+          backgrounds: {
+            src1: `/img/sea-fullsize@1x.jpg`,
+            src2: ``
+          },
+          imgAlt: `Фотография небоскреба`
+        }
       },
       datetime: `21.03.2019, 20:33`,
       title: `Путешествие в Голландию`,
@@ -348,11 +366,20 @@ const pageContentCategory = {
     {
       categories: [`Фриланс`],
       img: {
-        backgrounds: {
-          src1: `/img/sea@1x.jpg`,
-          src2: `/img/sea@1x.jpg 1x, img/sea@2x.jpg 2x`
+        preview: {
+          backgrounds: {
+            src1: `/img/sea@1x.jpg`,
+            src2: `/img/sea@1x.jpg 1x, img/sea@2x.jpg 2x`
+          },
+          imgAlt: `Фотография моря`
         },
-        imgText: `Фотография моря`
+        full: {
+          backgrounds: {
+            src1: `/img/sea-fullsize@1x.jpg`,
+            src2: ``
+          },
+          imgAlt: `Фотография небоскреба`
+        }
       },
       datetime: `21.03.2019, 20:33`,
       title: `Путешествие в Голландию`,
@@ -363,11 +390,20 @@ const pageContentCategory = {
     {
       categories: [`Дизайн`],
       img: {
-        backgrounds: {
-          src1: `/img/forest@1x.jpg`,
-          src2: `/img/forest@1x.jpg 1x, img/forest@2x.jpg 2x`
+        preview: {
+          backgrounds: {
+            src1: `/img/forest@1x.jpg`,
+            src2: `/img/forest@1x.jpg 1x, img/forest@2x.jpg 2x`
+          },
+          imgAlt: `Фотография леса`
         },
-        imgText: `Фотография леса`
+        full: {
+          backgrounds: {
+            src1: `/img/sea-fullsize@1x.jpg`,
+            src2: ``
+          },
+          imgAlt: `Фотография небоскреба`
+        }
       },
       datetime: `21.03.2019, 20:33`,
       title: `Я понял, но не все`,

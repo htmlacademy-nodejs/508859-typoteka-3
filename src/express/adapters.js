@@ -1,6 +1,6 @@
 'use strict';
 
-const getMainAdapter = (articleList) => {
+const adaptMainPage = (articleList) => {
   return {
     isAuth: true,
     title: `Типотека`,
@@ -35,7 +35,7 @@ const getMainAdapter = (articleList) => {
         count: 22
       }
     ],
-    discussedList: getArticleListAdapter(articleList),
+    discussedList: adaptArticleList(articleList),
     commentList: [
       {
         author: `Анна Артамонова`,
@@ -58,24 +58,24 @@ const getMainAdapter = (articleList) => {
           делаются))`
       }
     ],
-    postList: getArticleListAdapter(articleList)
+    postList: adaptArticleList(articleList)
   };
 };
 
-const getMyAdapter = (articleList) => ({
+const adaptMyPage = (articleList) => ({
   page: `my`,
   isAuth: true,
   title: `Типотека`,
-  postList: getArticleListAdapter(articleList)
+  postList: adaptArticleList(articleList)
 });
 
-const getArticleListAdapter = (articleList) => {
-  return articleList.map((article) => getArticleAdapter(article)).slice(0, 4);
+const adaptArticleList = (articleList) => {
+  return articleList.map((article) => adaptArticle(article)).slice(0, 4);
 };
 
-const getArticleAdapter = (article) => ({
+const adaptArticle = (article) => ({
   id: article.id,
-  categories: (getCategoriesAdapter(article.category)).slice(0, 3),
+  categories: (adaptCategoryList(article.category)).slice(0, 3),
   img: {
     preview: {
       backgrounds: {
@@ -99,21 +99,21 @@ const getArticleAdapter = (article) => ({
   commentCount: article.comments.length
 });
 
-const getCategoriesAdapter = (categories) => {
-  return categories.map((category) => getCategoryAdapter(category));
+const adaptCategoryList = (categories) => {
+  return categories.map((category) => adaptCategory(category));
 };
 
-const getCategoryAdapter = (category) => ({
+const adaptCategory = (category) => ({
   name: category,
   count: Math.floor(Math.random() * 100)
 });
 
 
-const getPostArticleAdapter = (article) => ({
+const adaptPostPage = (article) => ({
   page: `post`,
   isAuth: true,
   headerPost: `Бирюзовое доверие`,
-  ...getArticleAdapter(article),
+  ...adaptArticle(article),
   comments: [
     {
       commentUser: {
@@ -153,14 +153,14 @@ const getPostArticleAdapter = (article) => ({
   ]
 });
 
-const getMyCommentsAdapter = (comments) => ({
+const adaptMyCommentListPage = (comments) => ({
   page: `comments`,
   isAuth: true,
   title: `Типотека`,
   commentList: comments
 });
 
-const getNewPostAdapter = (content) => ({
+const adaptNewPostPage = (content) => ({
   page: `new-post`,
   isAuth: true,
   isEdit: false,
@@ -175,29 +175,29 @@ const getNewPostAdapter = (content) => ({
   }
 });
 
-const getSearchAdapter = (content) => ({
+const adaptSearchPage = (content) => ({
   page: `search`,
   isAuth: true,
   title: `Типотека`,
   searchWord: ``,
-  searchList: getSearchListAdapter(content)
+  searchList: adaptSearchList(content)
 });
 
-const getSearchListAdapter = (searchList) => {
-  return searchList.map((searchElem) => getSearchElemAdapter(searchElem));
+const adaptSearchList = (searchList) => {
+  return searchList.map((searchElem) => adaptSearchResult(searchElem));
 };
 
-const getSearchElemAdapter = (content) => ({
+const adaptSearchResult = (content) => ({
   createdDate: content.createdDate,
   title: content.title
 });
 
 module.exports = {
-  getMainAdapter,
-  getMyAdapter,
-  getMyCommentsAdapter,
-  getArticleAdapter,
-  getPostArticleAdapter,
-  getNewPostAdapter,
-  getSearchAdapter
+  adaptMainPage,
+  adaptMyPage,
+  adaptMyCommentListPage,
+  adaptArticle,
+  adaptPostPage,
+  adaptNewPostPage,
+  adaptSearchPage
 };

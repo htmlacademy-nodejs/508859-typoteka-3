@@ -6,7 +6,7 @@ block content
       .search-page__wrapper(class=!searchList.length ? 'search-page__wrapper--empty' : '')
         h1 Поиск
         .search.search-page__form
-          form(action='/search', method='post')
+          form(action='/search/results', method='get')
             label
               input(type='text', name="query", placeholder='Что ищем?', value=searchWord)
             button.search__button.button.button--transparent(type='submit') Найти

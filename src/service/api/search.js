@@ -13,7 +13,7 @@ module.exports = (app, searchService) => {
 
   route.get(`/`, (request, response) => {
 
-    const {query} = request.body;
+    const {query} = request.query;
 
     if (!query) {
       logger.error(`server:api Bad request search query`);
