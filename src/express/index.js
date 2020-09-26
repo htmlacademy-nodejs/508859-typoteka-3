@@ -17,6 +17,7 @@ const errorRoutes = require(`./routes/error-routes`);
 const {DEFAULT_PORT} = require(`../constants`);
 
 const PUBLIC_DIR = `public`;
+const PUBLIC_PHOTOS_DIR = `photos`;
 
 const app = express();
 
@@ -25,8 +26,8 @@ app.use(formidableMiddleware({
   uploadDir: `./tmp`,
   multiples: false,
 }));
-// app.use(express.urlencoded({extended: false}));
 app.use(express.static(path.resolve(__dirname, PUBLIC_DIR)));
+app.use(express.static(path.resolve(__dirname, PUBLIC_PHOTOS_DIR)));
 app.set(`views`, path.resolve(__dirname, `templates`));
 app.set(`view engine`, `pug`);
 

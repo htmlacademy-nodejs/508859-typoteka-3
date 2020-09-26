@@ -4,7 +4,7 @@ main
   section.modal.modal--flex
     .popup.popup--new-publication.popup--flex
       .new-publication
-        form(action='/articles/add', method='POST')
+        form(action='/articles/add', method='POST', enctype='multipart/form-data')
           .new-publication__header
             h1 Новая публикация
             .new-publication__date-form
@@ -28,7 +28,7 @@ main
                   input#image-name-field(type='text', placeholder='Фотография', name='img', value=post.img, readonly='')
                 .form__image-loader.form__image-loader--publication
                   label
-                    input.visually-hidden(type='file')
+                    input.visually-hidden(type='file', name='photo')
                     | Обзор
                 if isEdit
                   button.button.button--transparent

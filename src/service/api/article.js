@@ -32,7 +32,6 @@ module.exports = (app, articleService, commentService) => {
 
   route.post(`/`, articleValidator, (request, response) => {
 
-
     const article = articleService.create(request.body);
 
     logger.info(`server:api Create article`);
