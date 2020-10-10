@@ -1,8 +1,8 @@
 'use strict';
 
 const {Router} = require(`express`);
-const request = require(`request-promise-native`);
 
+const {getRequest} = require(`../api`);
 const {getLogger} = require(`../../utils/logger`);
 const logger = getLogger();
 
@@ -10,17 +10,25 @@ const {adaptMyPage, adaptMyCommentListPage} = require(`../adapters`);
 
 const myRouter = new Router();
 
-myRouter.get(`/`, (req, res) => {
-  logger.info(`client:routes End request with status code ${res.statusCode}`);
-  request(`http://localhost:3000/api/articles`, {json: true})
-    .then((content) => res.render(`my/my`, adaptMyPage(content)))
+myRouter.get(`/`, (request, response) => {
+  logger.info(`client:routes End request with status code ${response.statusCode}`);
+  getRequest().get(`/articles`)
+    .then((resp) => response.render(`my/my`, adaptMyPage(resp.data)))
     .catch((error) => logger.error(`client:request End request with error: ${error}`));
 });
 
-myRouter.get(`/comments`, (req, res) => {
-  logger.info(`client:routes End request with status code ${res.statusCode}`);
-  request(`http://localhost:3000/api/articles/qbJFX5/comments`, {json: true})
-    .then((content) => res.render(`my/comments`, adaptMyCommentListPage(content.slice(0, 3))))
+myRouter.get(`/comments`, (request, response) => {
+  logger.info(`client:routes End request with status code ${response.statusCode}`);
+
+  Promise.all([
+    getRequest().get(`/articles/qbJFX5/comments`),
+    getRequest().get(`/articles/FotbOO/comments`),
+    getRequest().get(`/articles/3-cejA/comments`)
+  ])
+    .then((resp) => {
+      const result = resp.map((item) => item.data);
+      response.render(`my/comments`, adaptMyCommentListPage(result.flat()));
+    })
     .catch((error) => logger.error(`client:request End request with error: ${error}`));
 });
 

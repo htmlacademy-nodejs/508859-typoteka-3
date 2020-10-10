@@ -19,3 +19,5 @@ requests.http
 .env
 /src/service/logs
 tmp/
+uploads/
+/src/express/photos/

@@ -1,14 +1,13 @@
 'use strict';
 
 const {Router} = require(`express`);
-const request = require(`request-promise-native`);
 
+const {getRequest} = require(`../api`);
 const {getLogger} = require(`../../utils/logger`);
 const logger = getLogger();
 
 const {
   pageContentAllCategories,
-  // pageContentSearch,
   pageContentRegister,
   pageContentLogin
 } = require(`../mock`);
@@ -17,49 +16,42 @@ const {adaptMainPage, adaptSearchPage} = require(`../adapters`);
 
 const mainRouter = new Router();
 
-mainRouter.get(`/`, (req, res) => {
-  logger.info(`client:routes End request with status code ${res.statusCode}`);
-  request(`http://localhost:3000/api/articles`, {json: true})
-    .then((content) => res.render(`main`, adaptMainPage(content)))
+mainRouter.get(`/`, async (request, response) => {
+  logger.info(`client:routes End request with status code ${response.statusCode}`);
+  getRequest().get(`/articles`)
+    .then((resp) => response.render(`main`, adaptMainPage(resp.data)))
     .catch((error) => logger.error(`client:request End request with error: ${error}`));
 });
 
-mainRouter.get(`/register`, (req, res) => {
-  logger.info(`client:routes End request with status code ${res.statusCode}`);
-  res.render(`auth/sign-up`, pageContentRegister);
+mainRouter.get(`/register`, (request, response) => {
+  logger.info(`client:routes End request with status code ${response.statusCode}`);
+  response.render(`auth/sign-up`, pageContentRegister);
 });
 
-mainRouter.get(`/login`, (req, res) => {
-  logger.info(`client:routes End request with status code ${res.statusCode}`);
-  res.render(`auth/login`, pageContentLogin);
+mainRouter.get(`/login`, (request, response) => {
+  logger.info(`client:routes End request with status code ${response.statusCode}`);
+  response.render(`auth/login`, pageContentLogin);
 });
 
-mainRouter.get(`/search`, (req, res) => {
-  logger.info(`client:routes End request with status code ${res.statusCode}`);
-  res.render(`search`, adaptSearchPage([]));
+mainRouter.get(`/search`, (request, response) => {
+  logger.info(`client:routes End request with status code ${response.statusCode}`);
+  response.render(`search`, adaptSearchPage([]));
 });
 
-mainRouter.get(`/search/results`, (req, res) => {
-  logger.info(`client:routes End request with status code ${res.statusCode}`);
-  const options = {
-    uri: `http://localhost:3000/api/search?query=${req.query}`,
-    json: true,
-    qs: req.query,
-    headers: {
-      'Content-Type': `application/json`
-    }
-  };
-  request(options)
-    .then((content) => res.render(`search`, adaptSearchPage(content)))
+mainRouter.get(`/search/results`, (request, response) => {
+  logger.info(`client:routes End request with status code ${response.statusCode}`);
+  const options = {params: request.query};
+  getRequest().get(`/search`, options)
+    .then((resp) => response.render(`search`, adaptSearchPage(resp.data)))
     .catch((error) => {
-      res.render(`search`, adaptSearchPage([]));
+      response.render(`search`, adaptSearchPage([]));
       logger.error(`client:request End request with error: ${error}`);
     });
 });
 
-mainRouter.get(`/categories`, (req, res) => {
-  logger.info(`client:routes End request with status code ${res.statusCode}`);
-  res.render(`all-categories`, pageContentAllCategories);
+mainRouter.get(`/categories`, (request, response) => {
+  logger.info(`client:routes End request with status code ${response.statusCode}`);
+  response.render(`all-categories`, pageContentAllCategories);
 });
 
 module.exports = mainRouter;
