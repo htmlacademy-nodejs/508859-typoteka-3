@@ -16,10 +16,10 @@ block content
             span.hot__icon.hot__icon--fire
           if discussedList.length
             ul.hot__list
-              each message, key in discussedList
-                li.hot__list-item(class=(message == discussedList[discussedList.length - 1]) ? 'hot__list-item--end' : '')
-                  a.hot__list-link(href=`/articles/${key}`)=message.text
-                    sup.hot__link-sup=message.hot
+              each article in discussedList
+                li.hot__list-item(class=(article == discussedList[discussedList.length - 1]) ? 'hot__list-item--end' : '')
+                  a.hot__list-link(href=`/articles/${article.id}`)=article.previewText
+                    sup.hot__link-sup=article.commentCount
           else
             p.hot__empty Здесь пока ничего нет...
         section.main-page__last.last

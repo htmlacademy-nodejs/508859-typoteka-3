@@ -15,20 +15,6 @@ const route = new Router();
 module.exports = (app, articleService, commentService) => {
   app.use(`/articles`, route);
 
-  route.get(`/`, (request, response) => {
-    const articles = articleService.findAll();
-
-    if (!articles) {
-      logger.error(`server:api Not found articles`);
-      return response.status(HttpCode.NOT_FOUND)
-        .send(`Not found articles`);
-    }
-
-    logger.info(`server:api Get articles`);
-    return response.status(HttpCode.OK)
-      .json(articles);
-  });
-
   route.get(`/:articleId`, (request, response) => {
     const {articleId} = request.params;
     const article = articleService.findOne(articleId);
@@ -45,11 +31,28 @@ module.exports = (app, articleService, commentService) => {
   });
 
   route.post(`/`, articleValidator, (request, response) => {
+
     const article = articleService.create(request.body);
 
     logger.info(`server:api Create article`);
+
     return response.status(HttpCode.CREATED)
       .json(article);
+  });
+
+
+  route.get(`/`, (request, response) => {
+    const articles = articleService.findAll();
+
+    if (!articles) {
+      logger.error(`server:api Not found articles`);
+      return response.status(HttpCode.NOT_FOUND)
+        .send(`Not found articles`);
+    }
+
+    logger.info(`server:api Get articles`);
+    return response.status(HttpCode.OK)
+      .json(articles);
   });
 
   route.put(`/:articleId`, articleValidator, (request, response) => {
