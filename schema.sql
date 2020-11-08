@@ -76,9 +76,9 @@ CREATE TABLE articles_categories
   category_id INTEGER NOT NULL,
 	CONSTRAINT articles_categories_pk PRIMARY KEY (article_id, category_id),
   FOREIGN KEY (article_id) REFERENCES articles (id)
-		ON DELETE CASCADE
+		ON DELETE SET NULL
 		ON UPDATE CASCADE,
 	FOREIGN KEY (category_id) REFERENCES categories (id)
-		ON DELETE CASCADE
+		ON DELETE SET NULL
 		ON UPDATE CASCADE
 );
