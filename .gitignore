@@ -18,4 +18,6 @@ mocks.json
 requests.http
 .env
 /src/service/logs
-/src/express/photos
+tmp/
+uploads/
+/src/express/photos/
