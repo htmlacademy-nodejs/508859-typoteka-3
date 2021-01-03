@@ -2,7 +2,16 @@ header.header
   a.header__logo.logo(href='/')
     img.logo__image(src='/img/icons/logo-image-only.svg', alt='логотип Тайпотеки')
     span.logo__name Типотека
-  if isAuth
+  if (isAuth && page == 'post')
+    nav.header__nav
+      ul.header__nav-list
+        li.header__list-item
+          p Алёна Фролова
+        li.header__list-item
+          a.header__exit(href="/") Выйти
+    a.header__avatar.avatar
+      img(src='/img/avatar-2.png' alt='аватар пользователя')
+  else if isAuth
     //- button.button.button--colored.header__button-new Новая запись
     a.button.button--colored.header__button-new(href='/articles/add') Новая запись
     .header__dropdown
@@ -78,7 +87,7 @@ header.header
     nav.header__nav
         ul.header__nav-list
           li.header__list-item
-            a.header__registration(href='/register') Регистрация
+            a.header__popup(href='/register') Регистрация
           li.header__list-item
             a.header__enter(href='/login') Вход с паролем
   a.header__search.button.button--search(href='/search', aria-label='поиск по сайту')
