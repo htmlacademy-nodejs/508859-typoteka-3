@@ -9,7 +9,7 @@ block content
       section.main-page__theme-list
         h2.visually-hidden Список тем
         include partials/categories.pug
-      .main-page__section-flex
+      .main-page__section-flex(class=discussedList.length && commentList.length ? '' : 'main-page__section-flex--short')
         section.main-page__hot.hot
           h2.hot__name(class=discussedList.length ? '' : 'hot__name--empty')
             | Самое обсуждаемое&nbsp;
