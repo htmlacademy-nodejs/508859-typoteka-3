@@ -2,6 +2,7 @@
 
 const chalk = require(`chalk`);
 
+const sequelize = require(`../lib/sequelize`);
 const app = require(`../start-server`);
 const {getLogger} = require(`../../utils/logger`);
 const logger = getLogger();
@@ -10,9 +11,18 @@ const DEFAULT_PORT = 3000;
 
 module.exports = {
   name: `--server`,
-  run(args) {
+  async run(args) {
     const [customPort] = args;
     const port = Number.parseInt(customPort, 10) || DEFAULT_PORT;
+
+    try {
+      logger.info(`Trying to connect to database...`);
+      await sequelize.authenticate();
+    } catch (err) {
+      logger.error(`An error occured: ${err.message}`);
+      process.exit(1);
+    }
+    logger.info(`Connection to database established`);
 
     try {
       app.listen(port, (error) => {

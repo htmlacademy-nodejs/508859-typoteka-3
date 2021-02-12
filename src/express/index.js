@@ -30,7 +30,7 @@ app.set(`view engine`, `pug`);
 app.use(pino);
 app.use(startRequest);
 
-app.use((request, _, next) => {
+app.use((request, response, next) => {
   logger.debug(`Start request to url ${request.url}`);
   next();
 });
