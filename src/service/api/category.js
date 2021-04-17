@@ -12,8 +12,9 @@ const route = new Router();
 module.exports = (app, categoryService) => {
   app.use(`/categories`, route);
 
-  route.get(`/`, (request, response) => {
-    const categories = categoryService.findAll();
+  route.get(`/`, async (request, response) => {
+    const {count} = request.query;
+    const categories = await categoryService.findAll(count);
 
     logger.info(`server:api Get categories`);
     response.status(HttpCode.OK)

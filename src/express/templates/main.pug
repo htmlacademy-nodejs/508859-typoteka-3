@@ -2,7 +2,7 @@ extends layout.pug
 
 block content
   main.main-page
-    if postList.length
+    if articles.length
       h1.visually-hidden Главная страница личного блога Типотека
       p
         | Это приветственный текст, который владелец блога может выбрать, чтобы описать себя 👏
@@ -18,8 +18,8 @@ block content
             ul.hot__list
               each article in discussedList
                 li.hot__list-item(class=(article == discussedList[discussedList.length - 1]) ? 'hot__list-item--end' : '')
-                  a.hot__list-link(href=`/articles/${article.id}`)=article.previewText
-                    sup.hot__link-sup=article.commentCount
+                  a.hot__list-link(href=`/articles/${article.id}`)=article.announce
+                    sup.hot__link-sup=article.categories.length
           else
             p.hot__empty Здесь пока ничего нет...
         section.main-page__last.last

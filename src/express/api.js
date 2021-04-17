@@ -1,19 +1,59 @@
-'use strict';
+"use strict";
 
 const axios = require(`axios`);
 
-const getRequest = () => {
-  return axios.create({
-    baseURL: `http://localhost:3000/api/`,
-    timeout: 5000,
-    withCredentials: true,
-    headers: {
-      'Content-Type': `application/json`,
-      'Accept': `application/json`,
-    }
-  });
-};
+const TIMEOUT = 1000;
+
+const port = process.env.API_PORT || 3000;
+const defaultURL = `http://localhost:${port}/api/`;
+
+class API {
+
+  constructor(baseURL, timeout) {
+    this._http = axios.create({
+      baseURL,
+      timeout,
+      withCredentials: true,
+      headers: {
+        'Content-Type': `application/json`,
+        'Accept': `application/json`,
+      }
+    });
+  }
+
+  async _load(url, options) {
+    const response = await this._http.request({url, ...options});
+    return response.data;
+  }
+
+  getArticles({offset, limit, comments} = {}) {
+    return this._load(`/articles`, {params: {offset, limit, comments}});
+  }
+
+  getArticle(id, comments) {
+    return this._load(`/articles/${id}`, {params: {comments}});
+  }
+
+  search(query) {
+    return this._load(`/search`, {params: {query}});
+  }
+
+  getCategories(count) {
+    return this._load(`/categories`, {params: {count}});
+  }
+
+  createArticle(data) {
+    return this._load(`/articles`, {
+      method: `POST`,
+      data
+    });
+  }
+}
+
+const defaultAPI = new API(defaultURL, TIMEOUT);
 
 module.exports = {
-  getRequest
+  API,
+  getAPI: () => defaultAPI
 };
+

@@ -2,36 +2,59 @@
 
 const {Router} = require(`express`);
 const fs = require(`fs`).promises;
+// const path = require(`path`);
 const multer = require(`multer`);
 
 const upload = multer({dest: `tmp/`});
 
-const {getRequest} = require(`../api`);
-const {adaptPostPage, adaptNewPostPage} = require(`../adapters`);
+// const UPLOAD_DIR = `../upload/img/`;
+
+// const uploadDirAbsolute = path.resolve(__dirname, UPLOAD_DIR);
+
+const api = require(`../api`).getAPI();
+// const {adaptPostPage, adaptNewPostPage} = require(`../adapters`);
 const {getLogger} = require(`../../utils/logger`);
 const logger = getLogger();
 
-const {
-  pageContentEditPost,
-  pageContentCategory
-} = require(`../mock`);
+// const {
+//   pageContentEditPost,
+//   pageContentCategory
+// } = require(`../mock`);
 
 const mainRouter = new Router();
 
-mainRouter.get(`/add`, (request, response) => {
+// const storage = multer.diskStorage({
+//   destination: uploadDirAbsolute,
+//   filename: (req, file, cb) => {
+//     const uniqueName = nanoid(10);
+//     const extension = file.originalname.split(`.`).pop();
+//     cb(null, `${uniqueName}.${extension}`);
+//   }
+// });
+
+// const upload = multer({storage});
+
+mainRouter.get(`/add`, async (request, response) => {
   logger.info(`client:routes End request with status code ${response.statusCode}`);
-  response.render(`articles/new-post`, adaptNewPostPage({}));
+  try {
+    const categories = await api.getCategories();
+    // adaptNewPostPage({})
+    response.render(`articles/new-post`, {categories});
+  } catch (error) {
+    logger.info(`client:request End request with error: ${error}`);
+  }
 });
 
 mainRouter.post(`/add`, upload.single(`photo`), async (request, response) => {
   logger.info(`client:routes End request with status code ${response.statusCode}`);
-
-  const {mimetype, originalname, size, path} = request.file;
+  const {body, file} = request;
+  const {mimetype, originalname, size, path} = file;
   const allowTypes = [`image/jpeg`, `image/png`];
 
   if (size === 0 || !allowTypes.includes(mimetype)) {
     fs.unlink(path);
-    return response.render(`articles/new-post`, adaptNewPostPage(request.body));
+    response.redirect(`back`);
+    // return response.render(`articles/new-post`, adaptNewPostPage(body));
   }
 
   try {
@@ -41,39 +64,70 @@ mainRouter.post(`/add`, upload.single(`photo`), async (request, response) => {
   }
 
   const data = {
-    ...request.body,
-    category: []
+    ...body,
+    category: body.category,
   };
 
-  const headers = {
-    'Content-Type': `application/json`
-  };
+  // const headers = {
+  //   'Content-Type': `application/json`
+  // };
 
-  return getRequest().post(`/articles`, data, {headers})
-    .then(() => {
-      response.redirect(`/my`);
-    })
-    .catch((error) => {
-      response.render(`articles/new-post`, adaptNewPostPage(request.body));
-      logger.error(`client:request End request with error: ${error}`);
-    });
+  try {
+    await api.createOffer(data);
+    response.redirect(`/my`);
+  } catch (error) {
+    response.redirect(`back`);
+    // response.render(`articles/new-post`, adaptNewPostPage(request.body));
+    logger.error(`client:request End request with error: ${error}`);
+  }
+
+  // return getRequest().post(`/articles`, data, {headers})
+  //   .then(() => {
+  //     response.redirect(`/my`);
+  //   })
+  //   .catch((error) => {
+  //     response.render(`articles/new-post`, adaptNewPostPage(request.body));
+  //     logger.error(`client:request End request with error: ${error}`);
+  //   });
 });
 
-mainRouter.get(`/edit/:id`, (request, response) => {
+mainRouter.get(`/edit/:id`, async (request, response) => {
   logger.info(`client:routes End request with status code ${response.statusCode}`);
-  response.render(`articles/new-post`, pageContentEditPost);
+  try {
+    const {id} = request.params;
+    const [article, categories] = await Promise.all([
+      api.getArticle(id),
+      api.getCategories()
+    ]);
+    response.render(`articles/new-post`, {article, categories});
+    // response.render(`articles/new-post`, pageContentEditPost);
+  } catch (error) {
+    logger.error(`client:request End request with error: ${error}`);
+  }
 });
 
-mainRouter.get(`/category/:id`, (request, response) => {
+mainRouter.get(`/category/:id`, async (request, response) => {
   logger.info(`client:routes End request with status code ${response.statusCode}`);
-  response.render(`articles/articles-by-category`, pageContentCategory);
+  try {
+    const {id} = request.params;
+    const category = await api.getCategories(id);
+    // pageContentCategory
+    response.render(`articles/articles-by-category`, {category});
+  } catch (error) {
+    logger.error(`client:request End request with error: ${error}`);
+  }
 });
 
-mainRouter.get(`/:id`, (request, response) => {
+mainRouter.get(`/:id`, async (request, response) => {
   logger.info(`client:routes End request with status code ${response.statusCode}`);
-  getRequest().get(`/articles/${request.params.id}`)
-    .then((resp) => response.render(`articles/post`, adaptPostPage(resp.data)))
-    .catch((error) => logger.error(`client:request End request with error: ${error}`));
+  try {
+    const {id} = request.params;
+    const article = await api.getArticle(id, true);
+    // adaptPostPage(resp.data)
+    response.render(`articles/post`, {article});
+  } catch (error) {
+    logger.error(`client:request End request with error: ${error}`);
+  }
 });
 
 module.exports = mainRouter;

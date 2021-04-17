@@ -15,9 +15,9 @@ const route = new Router();
 module.exports = (app, articleService, commentService) => {
   app.use(`/articles`, route);
 
-  route.get(`/:articleId`, (request, response) => {
+  route.get(`/:articleId`, async (request, response) => {
     const {articleId} = request.params;
-    const article = articleService.findOne(articleId);
+    const article = await articleService.findOne(articleId);
 
     if (!article) {
       logger.error(`server:api Not found article with ${articleId}`);
@@ -30,9 +30,9 @@ module.exports = (app, articleService, commentService) => {
       .json(article);
   });
 
-  route.post(`/`, articleValidator, (request, response) => {
+  route.post(`/`, articleValidator, async (request, response) => {
 
-    const article = articleService.create(request.body);
+    const article = await articleService.create(request.body);
 
     logger.info(`server:api Create article`);
 
@@ -41,8 +41,9 @@ module.exports = (app, articleService, commentService) => {
   });
 
 
-  route.get(`/`, (request, response) => {
-    const articles = articleService.findAll();
+  route.get(`/`, async (request, response) => {
+    const {comments} = request.query;
+    const articles = await articleService.findAll(comments);
 
     if (!articles) {
       logger.error(`server:api Not found articles`);
@@ -52,12 +53,12 @@ module.exports = (app, articleService, commentService) => {
 
     logger.info(`server:api Get articles`);
     return response.status(HttpCode.OK)
-      .json(articles);
+      .json({articles, count: articles.length});
   });
 
-  route.put(`/:articleId`, articleValidator, (request, response) => {
+  route.put(`/:articleId`, articleValidator, async (request, response) => {
     const {articleId} = request.params;
-    const article = articleService.findOne(articleId);
+    const article = await articleService.findOne(articleId);
 
     if (!article) {
       logger.error(`server:api Not found article with ${articleId}`);
@@ -72,9 +73,9 @@ module.exports = (app, articleService, commentService) => {
       .json(updatedArticle);
   });
 
-  route.delete(`/:articleId`, (request, response) => {
+  route.delete(`/:articleId`, async (request, response) => {
     const {articleId} = request.params;
-    const article = articleService.drop(articleId);
+    const article = await articleService.drop(articleId);
 
     if (!article) {
       logger.error(`server:api Not found article with ${articleId}`);
@@ -87,20 +88,20 @@ module.exports = (app, articleService, commentService) => {
       .json(article);
   });
 
-  route.get(`/:articleId/comments`, articleExist(articleService), (request, response) => {
+  route.get(`/:articleId/comments`, articleExist(articleService), async (request, response) => {
     const {article} = response.locals;
-    const comments = commentService.findAll(article);
+    const comments = await commentService.findAll(article);
 
     logger.info(`server:api Get comments article with ${article.id}`);
     response.status(HttpCode.OK)
       .json(comments);
   });
 
-  route.delete(`/:articleId/comments/:commentId`, articleExist(articleService), (request, response) => {
+  route.delete(`/:articleId/comments/:commentId`, articleExist(articleService), async (request, response) => {
     const {article} = response.locals;
     const {commentId} = request.params;
 
-    const deletedComment = commentService.drop(article, commentId);
+    const deletedComment = await commentService.drop(article, commentId);
 
     if (!deletedComment) {
       logger.error(`server:api Not found comment with ${commentId} (article ${article.id})`);
@@ -113,9 +114,9 @@ module.exports = (app, articleService, commentService) => {
       .json(deletedComment);
   });
 
-  route.post(`/:articleId/comments`, [articleExist(articleService), commentValidator], (request, response) => {
+  route.post(`/:articleId/comments`, [articleExist(articleService), commentValidator], async (request, response) => {
     const {article} = response.locals;
-    const comment = commentService.create(article, request.body);
+    const comment = await commentService.create(article, request.body);
 
     logger.info(`server:api Create comment article with ${article.id}`);
     return response.status(HttpCode.CREATED)

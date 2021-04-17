@@ -57,7 +57,6 @@ CREATE TABLE articles
 (
   id SERIAL PRIMARY KEY,
   user_id INTEGER NOT NULL,
-  -- comment_id INTEGER,
   title VARCHAR(250) NOT NULL,
   created_date DATE NOT NULL,
   image_path VARCHAR(255) NOT NULL,
@@ -66,9 +65,6 @@ CREATE TABLE articles
   FOREIGN KEY (user_id) REFERENCES users (id)
 		ON DELETE SET NULL
 		ON UPDATE SET NULL
-  -- FOREIGN KEY (comment_id) REFERENCES comments (id)
-	-- 	ON DELETE SET NULL
-	-- 	ON UPDATE SET NULL
 );
 
 CREATE UNIQUE INDEX articles_unique_ind ON articles (title);

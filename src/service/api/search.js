@@ -11,7 +11,7 @@ const route = new Router();
 module.exports = (app, searchService) => {
   app.use(`/search`, route);
 
-  route.get(`/`, (request, response) => {
+  route.get(`/`, async (request, response) => {
 
     const {query} = request.query;
 
@@ -21,7 +21,7 @@ module.exports = (app, searchService) => {
       return;
     }
 
-    const searchResults = searchService.findAll(query);
+    const searchResults = await searchService.findAll(query);
     const searchStatus = searchResults.length > 0 ? HttpCode.OK : HttpCode.NOT_FOUND;
 
     logger.info(`server:api Get query search`);
