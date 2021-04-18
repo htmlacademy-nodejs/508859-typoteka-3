@@ -1,3 +1,0 @@
-img/skyscraper@1x.jpg
-img/forest@1x.jpg
-img/sea@1x.jpg

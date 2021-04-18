@@ -30,11 +30,25 @@ class API {
     return this._load(`/articles`, {params: {offset, limit, comments}});
   }
 
-  getArticle(id, comments) {
-    return this._load(`/articles/${id}`, {params: {comments}});
+  getArticle(id) {
+    // comments
+    // {params: {comments}}
+    return this._load(`/articles/${id}`);
+  }
+
+  getAllComments() {
+    return this._load(`/articles/all-comments`);
+  }
+
+  getArticleComments(id) {
+    return this._load(`/articles/${id}/comments`);
   }
 
   search(query) {
+    return this._load(`/search`, {params: {query}});
+  }
+
+  getSearchResult(query) {
     return this._load(`/search`, {params: {query}});
   }
 

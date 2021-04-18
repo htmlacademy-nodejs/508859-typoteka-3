@@ -15,6 +15,13 @@ const route = new Router();
 module.exports = (app, articleService, commentService) => {
   app.use(`/articles`, route);
 
+  route.get(`/all-comments`, async (request, response) => {
+    const comments = await commentService.findAllComments();
+    logger.info(`server:api Get all comments`);
+    response.status(HttpCode.OK)
+      .json(comments);
+  });
+
   route.get(`/:articleId`, async (request, response) => {
     const {articleId} = request.params;
     const article = await articleService.findOne(articleId);
@@ -39,7 +46,6 @@ module.exports = (app, articleService, commentService) => {
     return response.status(HttpCode.CREATED)
       .json(article);
   });
-
 
   route.get(`/`, async (request, response) => {
     const {comments} = request.query;

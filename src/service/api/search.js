@@ -12,7 +12,6 @@ module.exports = (app, searchService) => {
   app.use(`/search`, route);
 
   route.get(`/`, async (request, response) => {
-
     const {query} = request.query;
 
     if (!query) {

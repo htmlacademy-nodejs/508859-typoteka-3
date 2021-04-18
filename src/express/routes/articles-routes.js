@@ -4,6 +4,7 @@ const {Router} = require(`express`);
 const fs = require(`fs`).promises;
 // const path = require(`path`);
 const multer = require(`multer`);
+const datefns = require(`date-fns`);
 
 const upload = multer({dest: `tmp/`});
 
@@ -106,13 +107,31 @@ mainRouter.get(`/edit/:id`, async (request, response) => {
   }
 });
 
-mainRouter.get(`/category/:id`, async (request, response) => {
+mainRouter.get(`/categories/:id`, async (request, response) => {
   logger.info(`client:routes End request with status code ${response.statusCode}`);
   try {
     const {id} = request.params;
-    const category = await api.getCategories(id);
-    // pageContentCategory
-    response.render(`articles/articles-by-category`, {category});
+    const [articles, categories] = await Promise.all([
+      api.getArticles(),
+      api.getCategories(true)
+    ]);
+    const updatedActicles = articles.articles.filter((article) => article.categories.some((category) => category.id === Number(id)));
+    const category = categories.find((categoryItem) => categoryItem.id === Number(id));
+    const updatedCategories = categories.map((categoryElem) => {
+      if (categoryElem.name === category.name) {
+        categoryElem.isActive = true;
+      }
+      return categoryElem;
+    });
+    const articlesByCategory = {
+      pageRender: `articles-by-category`,
+      isAuth: true,
+      title: `Публикации по категориям`,
+      categoryTitle: category.name,
+      articles: updatedActicles,
+      categories: updatedCategories,
+    };
+    response.render(`articles/articles-by-category`, articlesByCategory);
   } catch (error) {
     logger.error(`client:request End request with error: ${error}`);
   }
@@ -122,9 +141,29 @@ mainRouter.get(`/:id`, async (request, response) => {
   logger.info(`client:routes End request with status code ${response.statusCode}`);
   try {
     const {id} = request.params;
-    const article = await api.getArticle(id, true);
+    // const article = await api.getArticle(id);
+
+    const [
+      article,
+      comments
+    ] = await Promise.all([
+      api.getArticle(id),
+      api.getArticleComments(id)
+    ]);
+
+    const articleData = {
+      renderPage: `post`,
+      title: article.title,
+      isAuth: true,
+      article: {
+        ...article,
+        createdDate: datefns.format(new Date(article.createdDate), `dd.MM.yyyy, HH:mm`)
+      },
+      comments: comments.map((comment) => ({...comment, users: {...comment.users, name: `${comment.users.firstname} ${comment.users.lastname}`}, createdAt: datefns.format(new Date(comment.createdAt), `dd.MM.yyyy, HH:mm`)})),
+      categories: article.categories
+    };
     // adaptPostPage(resp.data)
-    response.render(`articles/post`, {article});
+    response.render(`articles/post`, articleData);
   } catch (error) {
     logger.error(`client:request End request with error: ${error}`);
   }

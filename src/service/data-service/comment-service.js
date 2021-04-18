@@ -1,5 +1,7 @@
 'use strict';
 
+const Aliase = require(`../models/aliase`);
+
 class CommentService {
 
   constructor(sequelize) {
@@ -7,10 +9,16 @@ class CommentService {
     this._Comment = sequelize.models.Comment;
   }
 
-  findAll(articleId) {
+  findAll(article) {
     return this._Comment.findAll({
-      where: {articleId},
-      raw: true
+      where: {articleId: article.id},
+      include: [Aliase.USERS],
+    });
+  }
+
+  findAllComments() {
+    return this._Comment.findAll({
+      include: [Aliase.USERS],
     });
   }
 

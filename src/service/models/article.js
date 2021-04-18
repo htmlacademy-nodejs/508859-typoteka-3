@@ -17,6 +17,10 @@ const define = (sequelize) => Article.init({
     type: DataTypes.STRING,
     allowNull: true
   },
+  imagePathFull: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
   announce: {
     type: DataTypes.STRING,
     allowNull: false

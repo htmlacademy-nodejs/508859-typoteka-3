@@ -4,7 +4,7 @@ ul.preview__list
       ul.preview__breadcrumbs
         each category in article.categories
           li.preview__breadcrumbs-item
-            a.preview__breadcrumbs-link(href='#')=category.name
+            a.preview__breadcrumbs-link(href='/articles/categories/' + category.id)=category.name
       if article.imagePath
         .preview__background
           img.preview__background-image(src=article.imagePath, srcset=article.imagePath, width='460', height='240', alt=article.title)

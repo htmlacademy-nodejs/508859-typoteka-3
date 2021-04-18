@@ -28,7 +28,7 @@ class ArticleService {
       include.push(Aliase.COMMENTS);
     }
     const articles = await this._Article.findAll({include});
-    return await articles.map((item) => item.get());
+    return articles.map((item) => item.get());
   }
 
   findOne(id) {

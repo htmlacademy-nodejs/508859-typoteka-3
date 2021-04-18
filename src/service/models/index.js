@@ -13,14 +13,14 @@ const define = (sequelize) => {
   const User = defineUser(sequelize);
   const ArticleCategory = defineArticleCategory(sequelize);
 
-  User.hasMany(Comment, {as: Aliase.COMMENTS, foreignKey: `userId`});
-  Comment.belongsTo(User, {foreignKey: `userId`, as: Aliase.USERS});
-
   Article.hasMany(Comment, {as: Aliase.COMMENTS, foreignKey: `articleId`});
   Comment.belongsTo(Article, {foreignKey: `articleId`, as: Aliase.ARTICLES});
 
   User.hasMany(Article, {as: Aliase.ARTICLES, foreignKey: `userId`});
   Article.belongsTo(User, {foreignKey: `userId`, as: Aliase.USERS});
+
+  User.hasMany(Comment, {as: Aliase.COMMENTS, foreignKey: `userId`});
+  Comment.belongsTo(User, {foreignKey: `userId`, as: Aliase.USERS});
 
   // Article.belongsToMany(Category, {through: `articleCategories`, as: Aliase.CATEGORIES});
   // Category.belongsToMany(Article, {through: `articleCategories`, as: Aliase.ARTICLES});

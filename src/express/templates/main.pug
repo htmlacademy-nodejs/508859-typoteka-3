@@ -30,8 +30,8 @@ block content
             ul.last__list
               each comment in commentList
                 li.last__list-item(class=(comment == commentList[commentList.length - 1]) ? 'last__list-item--end' : '')
-                  img.last__list-image(src=comment.avatar, width='20', height='20', alt='Аватар пользователя')
-                  b.last__list-name=comment.author
+                  img.last__list-image(src=comment.users.avatarPath, width='20', height='20', alt=comment.users.name)
+                  b.last__list-name=comment.users.name
                   a.last__list-link(href='#')=comment.text
           else
             p.last__empty Здесь пока ничего нет...

@@ -23,7 +23,13 @@ const FILE_COMMENTS_PATH = `./src/data/comments.txt`;
 const FILE_EMAIL_USERS_PATH = `./src/data/email_users.txt`;
 const FILE_FIRST_USERS_PATH = `./src/data/firstname_users.txt`;
 const FILE_LAST_USERS_PATH = `./src/data/lastname_users.txt`;
-const FILE_RANDOM_IMAGES_PATH = `./src/data/random_images.txt`;
+
+const images = [
+  {previewImg: `/img/skyscraper@1x.jpg`, fullImg: `/img/sea-fullsize@1x.jpg`},
+  {previewImg: `/img/forest@1x.jpg`, fullImg: `/img/sea-fullsize@1x.jpg`},
+  {previewImg: `/img/sea@1x.jpg`, fullImg: `/img/sea-fullsize@1x.jpg`}
+];
+
 
 const MAX_COUNT_OFFERS = 1000;
 const countUser = 5;
@@ -60,13 +66,14 @@ const readContent = async (filePath) => {
   }
 };
 
-const generateArticles = (count, titles, sentences, randomImages, categories, comments) => (
+const generateArticles = (count, titles, sentences, randomImage, categories, comments) => (
   Array(count).fill({}).map(() => ({
     title: titles[getRandomInt(0, titles.length - 1)],
     announce: shuffleElements(sentences).slice(DescriptionCount.MIN, DescriptionCount.MAX).join(` `),
     fullText: shuffleElements(sentences).slice(DescriptionCount.MIN, DescriptionCount.MAX).join(` `),
     createdDate: new Date(),
-    imagePath: randomImages[getRandomInt(0, randomImages.length - 1)],
+    imagePath: randomImage.previewImg,
+    imagePathFull: randomImage.fullImg,
     categories: getRandomSubarray(categories.slice(CategoryCount.MIN, CategoryCount.MAX)),
     comments: generateComments(getRandomInt(CommentCount.MIN, CommentCount.MAX), comments),
   }))
@@ -76,7 +83,7 @@ const generateComments = (count, comments) => (
   Array(count).fill({}).map(() => ({
     text: shuffleElements(comments)
       .slice(CommentTextCount.MIN, getRandomInt(CommentTextCount.MIN, CommentTextCount.MAX))
-      .join(` `)
+      .join(` `),
   }))
 );
 
@@ -89,6 +96,10 @@ const generateUsers = (count, email, firstname, lastname) => (
     avatarPath: `/img/avatar-2.png`,
   }))
 );
+
+const generateRandomImage = (pathImages) => {
+  return shuffleElements(pathImages)[0];
+};
 
 module.exports = {
   name: `--filldb`,
@@ -109,7 +120,8 @@ module.exports = {
     const emailUsers = await readContent(FILE_EMAIL_USERS_PATH);
     const firstUsers = await readContent(FILE_FIRST_USERS_PATH);
     const lastUsers = await readContent(FILE_LAST_USERS_PATH);
-    const randomImages = await readContent(FILE_RANDOM_IMAGES_PATH);
+
+    const randomImage = generateRandomImage(images);
 
     const [count] = args;
 
@@ -120,7 +132,7 @@ module.exports = {
 
     const countArticles = Number.parseInt(count, 10) || DEFAULT_COUNT;
     const users = generateUsers(countUser, emailUsers, firstUsers, lastUsers);
-    const articles = generateArticles(countArticles, titles, sentences, randomImages, categories, comments);
+    const articles = generateArticles(countArticles, titles, sentences, randomImage, categories, comments);
 
     return initDatabase(sequelize, {categories, articles, users});
   }
