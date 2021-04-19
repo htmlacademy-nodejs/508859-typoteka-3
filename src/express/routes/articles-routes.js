@@ -39,8 +39,23 @@ mainRouter.get(`/add`, async (request, response) => {
   logger.info(`client:routes End request with status code ${response.statusCode}`);
   try {
     const categories = await api.getCategories();
-    // adaptNewPostPage({})
-    response.render(`articles/new-post`, {categories});
+    const newPostData = {
+      page: `new-post`,
+      isAuth: true,
+      isEdit: false,
+      title: `new publication`,
+      categories,
+      article: {
+        title: ``, // content.title ||
+        img: ``, // content.img ||
+        createdDate: datefns.format(new Date(), `yyyy-MM-dd`),
+        createdAt: new Date(),
+        categories: [], // content.categories ||
+        announce: ``, // content.announce ||
+        fullText: `` // content.fullText ||
+      }
+    };
+    response.render(`articles/new-post`, newPostData);
   } catch (error) {
     logger.info(`client:request End request with error: ${error}`);
   }
@@ -74,7 +89,7 @@ mainRouter.post(`/add`, upload.single(`photo`), async (request, response) => {
   // };
 
   try {
-    await api.createOffer(data);
+    await api.createArticle(data);
     response.redirect(`/my`);
   } catch (error) {
     response.redirect(`back`);
@@ -100,8 +115,27 @@ mainRouter.get(`/edit/:id`, async (request, response) => {
       api.getArticle(id),
       api.getCategories()
     ]);
-    response.render(`articles/new-post`, {article, categories});
-    // response.render(`articles/new-post`, pageContentEditPost);
+    const editAtricleData = {
+      page: `new-post`,
+      isAuth: true,
+      isEdit: true,
+      title: `edit publication`,
+      article,
+      categories
+      // {
+      // header: `Как правильно заводить машину`,
+      // img: `moya_mashinka.jpg`,
+      // datetime: `21.03.2019`,
+      // categories: [
+      //   {
+      //     name: `Автомобили`
+      //   }
+      // ],
+      // text: `Материнский холдинг возглавит гендиректор Google Сундар Пичаи. При этом больше половины голосов в компании останется у Пейджа и Брина.`,
+      // fullText: `Основатели Google Ларри Пейдж и Сергей Брин отойдут от руководства материнским холдингом Alphabet, сказано в сообщении компании. Пейдж занимал пост гендиректора, а Брин — президента Alphabet. Alphabet возглавит гендиректор Google Сундар Пичаи, он также продолжит руководить Google. Должность президента холдинга будет упразднена.`
+      // }
+    };
+    response.render(`articles/new-post`, editAtricleData);
   } catch (error) {
     logger.error(`client:request End request with error: ${error}`);
   }
