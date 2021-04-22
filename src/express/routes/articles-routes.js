@@ -17,11 +17,6 @@ const api = require(`../api`).getAPI();
 const {getLogger} = require(`../../utils/logger`);
 const logger = getLogger();
 
-// const {
-//   pageContentEditPost,
-//   pageContentCategory
-// } = require(`../mock`);
-
 const mainRouter = new Router();
 
 // const storage = multer.diskStorage({
@@ -84,10 +79,6 @@ mainRouter.post(`/add`, upload.single(`photo`), async (request, response) => {
     category: body.category,
   };
 
-  // const headers = {
-  //   'Content-Type': `application/json`
-  // };
-
   try {
     await api.createArticle(data);
     response.redirect(`/my`);
@@ -96,15 +87,6 @@ mainRouter.post(`/add`, upload.single(`photo`), async (request, response) => {
     // response.render(`articles/new-post`, adaptNewPostPage(request.body));
     logger.error(`client:request End request with error: ${error}`);
   }
-
-  // return getRequest().post(`/articles`, data, {headers})
-  //   .then(() => {
-  //     response.redirect(`/my`);
-  //   })
-  //   .catch((error) => {
-  //     response.render(`articles/new-post`, adaptNewPostPage(request.body));
-  //     logger.error(`client:request End request with error: ${error}`);
-  //   });
 });
 
 mainRouter.get(`/edit/:id`, async (request, response) => {
@@ -122,18 +104,6 @@ mainRouter.get(`/edit/:id`, async (request, response) => {
       title: `edit publication`,
       article,
       categories
-      // {
-      // header: `Как правильно заводить машину`,
-      // img: `moya_mashinka.jpg`,
-      // datetime: `21.03.2019`,
-      // categories: [
-      //   {
-      //     name: `Автомобили`
-      //   }
-      // ],
-      // text: `Материнский холдинг возглавит гендиректор Google Сундар Пичаи. При этом больше половины голосов в компании останется у Пейджа и Брина.`,
-      // fullText: `Основатели Google Ларри Пейдж и Сергей Брин отойдут от руководства материнским холдингом Alphabet, сказано в сообщении компании. Пейдж занимал пост гендиректора, а Брин — президента Alphabet. Alphabet возглавит гендиректор Google Сундар Пичаи, он также продолжит руководить Google. Должность президента холдинга будет упразднена.`
-      // }
     };
     response.render(`articles/new-post`, editAtricleData);
   } catch (error) {

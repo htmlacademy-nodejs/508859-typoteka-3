@@ -8,11 +8,6 @@ const {getLogger} = require(`../../utils/logger`);
 const logger = getLogger();
 
 const {
-  pageContentRegister,
-  pageContentLogin
-} = require(`../mock`);
-
-const {
   // adaptMainPage,
   adaptSearchPage
 } = require(`../adapters`);
@@ -61,12 +56,29 @@ mainRouter.get(`/`, async (request, response) => {
 
 mainRouter.get(`/register`, (request, response) => {
   logger.info(`client:routes End request with status code ${response.statusCode}`);
-  response.render(`auth/sign-up`, pageContentRegister);
+  const registerData = {
+    errorList: [
+      // `Пароль не может состоять из двух букв`,
+      // `Фамилия не должна быть смешной`
+    ],
+    errorLogin: {
+      errorEmail: false,
+      errorPassword: false
+    }
+  };
+  response.render(`auth/sign-up`, registerData);
 });
 
 mainRouter.get(`/login`, (request, response) => {
   logger.info(`client:routes End request with status code ${response.statusCode}`);
-  response.render(`auth/login`, pageContentLogin);
+  const loginData = {
+    errorList: [],
+    errorLogin: {
+      errorEmail: false,
+      errorPassword: false
+    }
+  };
+  response.render(`auth/login`, loginData);
 });
 
 mainRouter.get(`/search`, (request, response) => {
@@ -100,17 +112,6 @@ mainRouter.get(`/search/results`, async (request, response) => {
     response.render(`search`, emptySearchData);
     logger.error(`client:request End request with error: ${error}`);
   }
-});
-
-mainRouter.get(`/categories`, async (request, response) => {
-  logger.info(`client:routes End request with status code ${response.statusCode}`);
-  const categories = await api.getCategories();
-  const categoryData = {
-    page: `all-categories`,
-    isAuth: true,
-    categories
-  };
-  response.render(`all-categories`, categoryData);
 });
 
 module.exports = mainRouter;

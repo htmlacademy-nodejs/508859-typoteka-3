@@ -7,7 +7,7 @@ const TIMEOUT = 1000;
 const port = process.env.API_PORT || 3000;
 const defaultURL = `http://localhost:${port}/api/`;
 
-class API {
+class Api {
 
   constructor(baseURL, timeout) {
     this._http = axios.create({
@@ -36,6 +36,13 @@ class API {
     return this._load(`/articles/${id}`);
   }
 
+  createArticle(data) {
+    return this._load(`/articles`, {
+      method: `POST`,
+      data
+    });
+  }
+
   getAllComments() {
     return this._load(`/articles/all-comments`);
   }
@@ -56,18 +63,31 @@ class API {
     return this._load(`/categories`, {params: {count}});
   }
 
-  createArticle(data) {
-    return this._load(`/articles`, {
+  createCategory(data) {
+    return this._load(`/categories`, {
       method: `POST`,
       data
     });
   }
+
+  updateCategory(data, id) {
+    return this._load(`/categories/${id}/edit`, {
+      method: `PUT`,
+      data
+    });
+  }
+
+  deleteCategory(id) {
+    return this._load(`/categories/${id}/delete`, {
+      method: `DELETE`
+    });
+  }
 }
 
-const defaultAPI = new API(defaultURL, TIMEOUT);
+const defaultAPI = new Api(defaultURL, TIMEOUT);
 
 module.exports = {
-  API,
+  Api,
   getAPI: () => defaultAPI
 };
 

@@ -8,10 +8,10 @@ block content
         each comment in commentList
           li.publication__list-item(class=(comment == commentList[commentList.length - 1] ? 'publication__list-item--last' : ''))
             .publication__header
-              img.publication__list-image(src=comment.img, width='20', height='20', alt='Аватар пользователя')
-              b.publication__list-name=comment.name
-              time.publication__item-time(datetime='2019-03-21T20:33')=comment.datetime
+              img.publication__list-image(src=comment.users.avatarPath, width='20', height='20', alt='Аватар пользователя')
+              b.publication__list-name=comment.users.name
+              time.publication__item-time(datetime=comment.createdAt)=comment.createdDate
             a.publication__item-text(href='#')=comment.text
-            p.publication__text-strong=comment.fullText
+            p.publication__text-strong=comment.text
             button.publication__button.button.button--close-item(type='button')
               span.visually-hidden Закрыть строку списка

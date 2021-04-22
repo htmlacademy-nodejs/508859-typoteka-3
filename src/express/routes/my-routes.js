@@ -7,8 +7,6 @@ const api = require(`../api`).getAPI();
 const {getLogger} = require(`../../utils/logger`);
 const logger = getLogger();
 
-const {adaptMyCommentListPage} = require(`../adapters`);
-
 const myRouter = new Router();
 
 myRouter.get(`/`, async (request, response) => {
@@ -30,8 +28,15 @@ myRouter.get(`/`, async (request, response) => {
 myRouter.get(`/comments`, async (request, response) => {
   logger.info(`client:routes End request with status code ${response.statusCode}`);
   try {
-    const articles = await api.getArticles({comments: true});
-    response.render(`comments`, {articles: adaptMyCommentListPage(articles.slice(0, 3))});
+    const comments = await api.getAllComments();
+    const updatedComments = comments.filter((comment) => comment.users !== null);
+    const commentListData = {
+      page: `comments`,
+      isAuth: true,
+      title: `Типотека`,
+      commentList: updatedComments.map((comment) => ({...comment, createdDate: datefns.format(new Date(comment.createdAt), `dd.MM.yyyy, HH:mm`)})).slice(0, 3)
+    };
+    response.render(`my/comments`, commentListData);
   } catch (error) {
     logger.error(`client:request End request with error: ${error}`);
   }

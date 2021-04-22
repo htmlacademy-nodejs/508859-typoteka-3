@@ -31,8 +31,8 @@ class ArticleService {
     return articles.map((item) => item.get());
   }
 
-  findOne(id) {
-    return this._Article.findByPk(id, {include: [Aliase.CATEGORIES]});
+  async findOne(id) {
+    return await this._Article.findByPk(id, {include: [Aliase.CATEGORIES]});
   }
 
   async update(id, article) {
@@ -41,7 +41,6 @@ class ArticleService {
     });
     return !!affectedRows;
   }
-
 }
 
 module.exports = ArticleService;

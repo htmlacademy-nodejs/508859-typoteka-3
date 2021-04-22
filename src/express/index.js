@@ -12,6 +12,7 @@ const startRequest = require(`../utils/start-request`);
 const mainRoutes = require(`./routes/main-routes`);
 const myRoutes = require(`./routes/my-routes`);
 const articlesRoutes = require(`./routes/articles-routes`);
+const categoriesRoutes = require(`./routes/categories-routes`);
 const errorRoutes = require(`./routes/error-routes`);
 const {DEFAULT_PORT} = require(`../constants`);
 
@@ -38,6 +39,7 @@ app.use((request, response, next) => {
 app.use(`/`, mainRoutes);
 app.use(`/my`, myRoutes);
 app.use(`/articles`, articlesRoutes);
+app.use(`/categories`, categoriesRoutes);
 app.use(`/error`, errorRoutes);
 
 app.use((request, response) => {
