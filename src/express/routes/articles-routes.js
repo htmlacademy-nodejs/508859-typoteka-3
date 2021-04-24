@@ -117,7 +117,7 @@ articleRouter.get(`/categories/:id`, async (request, response) => {
   try {
     const {id} = request.params;
     const [articles, categories] = await Promise.all([
-      api.getArticles(),
+      api.getArticles({comments: true}),
       api.getCategories(true)
     ]);
     const updatedActicles = articles.articles.filter((article) => article.categories.some((category) => category.id === Number(id)));
