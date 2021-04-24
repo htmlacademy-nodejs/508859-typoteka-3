@@ -43,12 +43,31 @@ class Api {
     });
   }
 
+  deleteArticle(id) {
+    return this._load(`/articles/${id}/delete`, {
+      method: `DELETE`
+    });
+  }
+
   getAllComments() {
     return this._load(`/articles/all-comments`);
   }
 
   getArticleComments(id) {
     return this._load(`/articles/${id}/comments`);
+  }
+
+  createComment(data, articleId) {
+    return this._load(`/articles/${articleId}/comments`, {
+      method: `POST`,
+      data
+    });
+  }
+
+  deleteComment(articleId, commentId) {
+    return this._load(`/articles/${articleId}/comments/${commentId}`, {
+      method: `DELETE`
+    });
   }
 
   search(query) {

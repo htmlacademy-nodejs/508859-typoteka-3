@@ -13,5 +13,7 @@ block content
               time.publication__item-time(datetime=comment.createdAt)=comment.createdDate
             a.publication__item-text(href='#')=comment.text
             p.publication__text-strong=comment.text
-            button.publication__button.button.button--close-item(type='button')
+            input.article_id(type='hidden', name='article_id', value=comment.articleId)
+            input.comment_id(type='hidden', name='comment_id', value=comment.id)
+            button.publication__button.button.button--close-item.button--comment-delete(type='button')
               span.visually-hidden Закрыть строку списка

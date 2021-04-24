@@ -41,7 +41,7 @@ mainRouter.get(`/`, async (request, response) => {
       isAuth: true,
       title: `Типотека`,
       renderPage: `main`,
-      articles,
+      articles: articles.map((article) => ({...article, createdDate: datefns.format(new Date(article.createdAt), `dd.MM.yyyy, HH:mm`)})),
       page,
       totalPages,
       categories,

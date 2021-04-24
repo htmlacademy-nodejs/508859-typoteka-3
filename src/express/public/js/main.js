@@ -327,3 +327,40 @@ if (typeof window === 'undefined' || typeof window.getComputedStyle !== 'functio
 //     autosize(element);
 //   });
 // }
+
+function fetchRequest (url, options, redirect) {
+  fetch(url, options)
+    .then(() => window.location.href = redirect)
+    .catch((err) => console.error(err));
+}
+
+const categoryListItem = document.querySelectorAll('.category__list-item');
+const notesListItem = document.querySelectorAll('.notes__list-item');
+const publicationListItem = document.querySelectorAll('.publication__list-item');
+
+categoryListItem.forEach((categoryItem) => {
+  const categoryDeleteBtn = categoryItem.querySelector('.button--category-delete');
+  const categoryId = categoryItem.querySelector('.category_id').value;
+  categoryDeleteBtn.addEventListener('click', () => {
+    fetchRequest(`/categories/${categoryId}/delete`, {method: 'POST'}, '/categories');
+  });
+});
+
+notesListItem.forEach((articleItem) => {
+  const articleDeleteBtn = articleItem.querySelector('.button--article-delete');
+  const articleId = articleItem.querySelector('.article_id').value;
+  articleDeleteBtn.addEventListener('click', () => {
+    fetchRequest(`/articles/${articleId}/delete`, {method: 'POST'}, '/my');
+  });
+});
+
+publicationListItem.forEach((commentItem) => {
+  const commentDeleteBtn = commentItem.querySelector('.button--comment-delete');
+  const articleId = commentItem.querySelector('.article_id').value;
+  const commentId = commentItem.querySelector('.comment_id').value;
+  commentDeleteBtn.addEventListener('click', () => {
+    fetchRequest(`/articles/${articleId}/comments/${commentId}`, {method: 'POST'}, '/my/comments');
+  });
+});
+
+

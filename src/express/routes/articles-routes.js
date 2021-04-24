@@ -13,11 +13,10 @@ const upload = multer({dest: `tmp/`});
 // const uploadDirAbsolute = path.resolve(__dirname, UPLOAD_DIR);
 
 const api = require(`../api`).getAPI();
-// const {adaptPostPage, adaptNewPostPage} = require(`../adapters`);
 const {getLogger} = require(`../../utils/logger`);
 const logger = getLogger();
 
-const mainRouter = new Router();
+const articleRouter = new Router();
 
 // const storage = multer.diskStorage({
 //   destination: uploadDirAbsolute,
@@ -30,7 +29,7 @@ const mainRouter = new Router();
 
 // const upload = multer({storage});
 
-mainRouter.get(`/add`, async (request, response) => {
+articleRouter.get(`/add`, async (request, response) => {
   logger.info(`client:routes End request with status code ${response.statusCode}`);
   try {
     const categories = await api.getCategories();
@@ -56,7 +55,7 @@ mainRouter.get(`/add`, async (request, response) => {
   }
 });
 
-mainRouter.post(`/add`, upload.single(`photo`), async (request, response) => {
+articleRouter.post(`/add`, upload.single(`photo`), async (request, response) => {
   logger.info(`client:routes End request with status code ${response.statusCode}`);
   const {body, file} = request;
   const {mimetype, originalname, size, path} = file;
@@ -65,7 +64,6 @@ mainRouter.post(`/add`, upload.single(`photo`), async (request, response) => {
   if (size === 0 || !allowTypes.includes(mimetype)) {
     fs.unlink(path);
     response.redirect(`back`);
-    // return response.render(`articles/new-post`, adaptNewPostPage(body));
   }
 
   try {
@@ -75,8 +73,12 @@ mainRouter.post(`/add`, upload.single(`photo`), async (request, response) => {
   }
 
   const data = {
-    ...body,
-    category: body.category,
+    title: body.title,
+    imagePath: originalname,
+    announce: body.announce,
+    fullText: body.fullText,
+    createdDate: body.createdDate || new Date(),
+    categories: body.category || [],
   };
 
   try {
@@ -84,12 +86,11 @@ mainRouter.post(`/add`, upload.single(`photo`), async (request, response) => {
     response.redirect(`/my`);
   } catch (error) {
     response.redirect(`back`);
-    // response.render(`articles/new-post`, adaptNewPostPage(request.body));
     logger.error(`client:request End request with error: ${error}`);
   }
 });
 
-mainRouter.get(`/edit/:id`, async (request, response) => {
+articleRouter.get(`/edit/:id`, async (request, response) => {
   logger.info(`client:routes End request with status code ${response.statusCode}`);
   try {
     const {id} = request.params;
@@ -111,7 +112,7 @@ mainRouter.get(`/edit/:id`, async (request, response) => {
   }
 });
 
-mainRouter.get(`/categories/:id`, async (request, response) => {
+articleRouter.get(`/categories/:id`, async (request, response) => {
   logger.info(`client:routes End request with status code ${response.statusCode}`);
   try {
     const {id} = request.params;
@@ -141,11 +142,10 @@ mainRouter.get(`/categories/:id`, async (request, response) => {
   }
 });
 
-mainRouter.get(`/:id`, async (request, response) => {
+articleRouter.get(`/:id`, async (request, response) => {
   logger.info(`client:routes End request with status code ${response.statusCode}`);
   try {
     const {id} = request.params;
-    // const article = await api.getArticle(id);
 
     const [
       article,
@@ -161,16 +161,64 @@ mainRouter.get(`/:id`, async (request, response) => {
       isAuth: true,
       article: {
         ...article,
+        imagePathFull: article.imagePathFull ? article.imagePathFull : `/${article.imagePath}`,
         createdDate: datefns.format(new Date(article.createdDate), `dd.MM.yyyy, HH:mm`)
       },
-      comments: comments.map((comment) => ({...comment, users: {...comment.users, name: `${comment.users.firstname} ${comment.users.lastname}`}, createdAt: datefns.format(new Date(comment.createdAt), `dd.MM.yyyy, HH:mm`)})),
+      comments: comments.filter((comment) => comment.userId).map((comment) => ({...comment, users: {...comment.users, name: `${comment.users.firstname} ${comment.users.lastname}`}, createdDate: datefns.format(new Date(comment.createdAt), `dd.MM.yyyy, HH:mm`)})),
       categories: article.categories
     };
-    // adaptPostPage(resp.data)
     response.render(`articles/post`, articleData);
   } catch (error) {
     logger.error(`client:request End request with error: ${error}`);
   }
 });
 
-module.exports = mainRouter;
+articleRouter.post(`/:articleId/comments`, async (request, response) => {
+  logger.info(`client:routes End request with status code ${response.statusCode}`);
+  const {articleId} = request.params;
+  const {body} = request;
+
+  if (!body.text) {
+    response.redirect(`back`);
+  }
+
+  const data = {
+    text: body.text,
+  };
+
+  try {
+    await api.createComment(data, articleId);
+    response.redirect(`back`);
+  } catch (error) {
+    response.redirect(`back`);
+    logger.error(`client:request End request with error: ${error}`);
+  }
+});
+
+articleRouter.post(`/:id/delete`, async (request, response) => {
+  logger.info(`client:routes End request with status code ${response.statusCode}`);
+  const {id} = request.params;
+
+  try {
+    await api.deleteArticle(id);
+    await response.redirect(`/`);
+  } catch (error) {
+    response.redirect(`back`);
+    logger.error(`client:request End request with error: ${error}`);
+  }
+});
+
+articleRouter.post(`/:articleId/comments/:commentId`, async (request, response) => {
+  logger.info(`client:routes End request with status code ${response.statusCode}`);
+  const {articleId, commentId} = request.params;
+
+  try {
+    await api.deleteComment(articleId, commentId);
+    await response.redirect(`/`);
+  } catch (error) {
+    response.redirect(`back`);
+    logger.error(`client:request End request with error: ${error}`);
+  }
+});
+
+module.exports = articleRouter;

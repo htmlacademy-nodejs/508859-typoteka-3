@@ -21,6 +21,7 @@ block content
             p=article.fullText
       .post__wrapper.post__wrapper--comments
         section.post__comments.comments
+          a(name='comments')
           if comments.length
             h2.comments__title.title.title--middle Комментарии
             ul.comments__list
@@ -32,18 +33,18 @@ block content
                     .comments__head
                       p=comment.users.name
                         |  •
-                      time.comments__date(datetime='2019-03-21T20:33')=comment.createdAt
+                      time.comments__date(datetime=comment.createdAt)=comment.createdDate
                     p.comments__message=comment.text
           else
             h2.comments__title.title.title--middle
               | Комментарии отсутствуют
           if isAuth
             .comments__footer.comments__footer--user
-              form(action='#', method='POST')
+              form(action='/articles/' + article.id + '/comments', method='POST')
                 .avatar
                   img(src='/img/avatar-2.png', alt='аватар пользователя')
                 label
-                  textarea(rows='1', placeholder='Присоединиться к обсуждению')
+                  textarea(rows='1', placeholder='Присоединиться к обсуждению', name='text')
                 button.comments__button.button.button--colored(type='submit') Опубликовать
           else
             .comments__footer.comments__footer--visitor

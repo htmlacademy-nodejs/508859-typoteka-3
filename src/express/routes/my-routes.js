@@ -29,7 +29,7 @@ myRouter.get(`/comments`, async (request, response) => {
   logger.info(`client:routes End request with status code ${response.statusCode}`);
   try {
     const comments = await api.getAllComments();
-    const updatedComments = comments.filter((comment) => comment.users !== null);
+    const updatedComments = comments.filter((comment) => comment.users !== null && comment.articleId !== null);
     const commentListData = {
       page: `comments`,
       isAuth: true,

@@ -43,13 +43,12 @@ categoryRouter.post(`/add`, async (request, response) => {
 });
 
 categoryRouter.post(`/:id/delete`, async (request, response) => {
-
   logger.info(`client:routes End request with status code ${response.statusCode}`);
   const {id} = request.params;
 
   try {
     await api.deleteCategory(id);
-    response.redirect(`/categories`);
+    await response.redirect(`/categories`);
   } catch (error) {
     response.redirect(`back`);
     logger.error(`client:request End request with error: ${error}`);

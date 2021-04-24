@@ -79,7 +79,7 @@ module.exports = (app, articleService, commentService) => {
       .json(updatedArticle);
   });
 
-  route.delete(`/:articleId`, async (request, response) => {
+  route.delete(`/:articleId/delete`, async (request, response) => {
     const {articleId} = request.params;
     const article = await articleService.drop(articleId);
 
@@ -107,7 +107,7 @@ module.exports = (app, articleService, commentService) => {
     const {article} = response.locals;
     const {commentId} = request.params;
 
-    const deletedComment = await commentService.drop(article, commentId);
+    const deletedComment = await commentService.drop(commentId);
 
     if (!deletedComment) {
       logger.error(`server:api Not found comment with ${commentId} (article ${article.id})`);
@@ -122,7 +122,7 @@ module.exports = (app, articleService, commentService) => {
 
   route.post(`/:articleId/comments`, [articleExist(articleService), commentValidator], async (request, response) => {
     const {article} = response.locals;
-    const comment = await commentService.create(article, request.body);
+    const comment = await commentService.create(article.id, request.body);
 
     logger.info(`server:api Create comment article with ${article.id}`);
     return response.status(HttpCode.CREATED)
