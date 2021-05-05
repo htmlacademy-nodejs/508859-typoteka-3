@@ -1,8 +1,9 @@
+/* eslint-disable consistent-return */
 'use strict';
 
 const {HttpCode} = require(`../../constants`);
 
-const articleKeys = [`title`, `announce`, `fullText`, `createdDate`, `category`];
+const articleKeys = [`title`, `announce`, `fullText`, `createdDate`, `categories`];
 
 module.exports = (req, res, next) => {
   const newArticle = req.body;
@@ -10,7 +11,7 @@ module.exports = (req, res, next) => {
   const keysExists = articleKeys.every((key) => keys.includes(key));
 
   if (!keysExists) {
-    res.status(HttpCode.BAD_REQUEST)
+    return res.status(HttpCode.BAD_REQUEST)
       .send(`Bad request`);
   }
 

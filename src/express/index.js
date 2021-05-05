@@ -2,6 +2,7 @@
 
 const path = require(`path`);
 const express = require(`express`);
+const cors = require(`cors`);
 
 const {getLogger} = require(`../utils/logger`);
 const logger = getLogger();
@@ -12,13 +13,19 @@ const startRequest = require(`../utils/start-request`);
 const mainRoutes = require(`./routes/main-routes`);
 const myRoutes = require(`./routes/my-routes`);
 const articlesRoutes = require(`./routes/articles-routes`);
+const categoriesRoutes = require(`./routes/categories-routes`);
 const errorRoutes = require(`./routes/error-routes`);
+
 const {DEFAULT_PORT} = require(`../constants`);
 
 const PUBLIC_DIR = `public`;
 const PUBLIC_PHOTOS_DIR = `photos`;
 
 const app = express();
+
+app.use(cors({
+  origin: `http:localhost:8080/`,
+}));
 
 app.use(express.urlencoded({extended: true}));
 
@@ -38,6 +45,7 @@ app.use((request, response, next) => {
 app.use(`/`, mainRoutes);
 app.use(`/my`, myRoutes);
 app.use(`/articles`, articlesRoutes);
+app.use(`/categories`, categoriesRoutes);
 app.use(`/error`, errorRoutes);
 
 app.use((request, response) => {

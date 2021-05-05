@@ -1,18 +1,19 @@
 ul.preview__list
-  each post in postList
-    li.preview__item(class=!post.img ? 'preview__item--noimage' : '')
+  each article in articles
+    li.preview__item(class=!article.imagePath ? 'preview__item--noimage' : '')
       ul.preview__breadcrumbs
-        each category in post.categories
+        each category in article.categories
           li.preview__breadcrumbs-item
-            a.preview__breadcrumbs-link(href='#')=category.name
-      if post.img
+            a.preview__breadcrumbs-link(href='/articles/categories/' + category.id)=category.name
+      if article.imagePath
         .preview__background
-          img.preview__background-image(src=post.img.preview.backgrounds.src1, width='460', height='240', srcset=post.img.preview.backgrounds.src2, alt=post.img.imgText)
-      time.preview__time(datetime='2019-03-21T20:33')=post.datetime
+          img.preview__background-image(src=article.imagePath, srcset=article.imagePath, width='460', height='240', alt=article.title)
+      time.preview__time(datetime=article.createdAt)=article.createdDate
       h3.preview__name
-        a.preview__name-link(href=`/articles/${post.id}`)=post.title
-      p.preview__text=post.previewText
-      a.preview__comment(href='#')
+        a.preview__name-link(href=`/articles/${article.id}`)=article.title
+      p.preview__text=article.announce
+      a.preview__comment(href=`/articles/${article.id}#comments`)
         | Комментарии
         span.preview__cloud
-        b.preview__comment-count=post.commentCount
+        | &nbsp;
+        b.preview__comment-count=article.comments.length

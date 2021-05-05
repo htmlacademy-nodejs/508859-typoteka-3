@@ -3,35 +3,51 @@
 const {Router} = require(`express`);
 const fs = require(`fs`).promises;
 const multer = require(`multer`);
+const datefns = require(`date-fns`);
 
 const upload = multer({dest: `tmp/`});
 
-const {getRequest} = require(`../api`);
-const {adaptPostPage, adaptNewPostPage} = require(`../adapters`);
+const api = require(`../api`).getAPI();
 const {getLogger} = require(`../../utils/logger`);
 const logger = getLogger();
 
-const {
-  pageContentEditPost,
-  pageContentCategory
-} = require(`../mock`);
+const articleRouter = new Router();
 
-const mainRouter = new Router();
-
-mainRouter.get(`/add`, (request, response) => {
+articleRouter.get(`/add`, async (request, response) => {
   logger.info(`client:routes End request with status code ${response.statusCode}`);
-  response.render(`articles/new-post`, adaptNewPostPage({}));
+  try {
+    const categories = await api.getCategories();
+    const newPostData = {
+      page: `new-post`,
+      isAuth: true,
+      isEdit: false,
+      title: `new publication`,
+      categories,
+      article: {
+        title: ``, // content.title ||
+        img: ``, // content.img ||
+        createdDate: datefns.format(new Date(), `yyyy-MM-dd`),
+        createdAt: new Date(),
+        categories: [], // content.categories ||
+        announce: ``, // content.announce ||
+        fullText: `` // content.fullText ||
+      }
+    };
+    response.render(`articles/new-post`, newPostData);
+  } catch (error) {
+    logger.info(`client:request End request with error: ${error}`);
+  }
 });
 
-mainRouter.post(`/add`, upload.single(`photo`), async (request, response) => {
+articleRouter.post(`/add`, upload.single(`photo`), async (request, response) => {
   logger.info(`client:routes End request with status code ${response.statusCode}`);
-
-  const {mimetype, originalname, size, path} = request.file;
+  const {body, file} = request;
+  const {mimetype, originalname, size, path} = file;
   const allowTypes = [`image/jpeg`, `image/png`];
 
   if (size === 0 || !allowTypes.includes(mimetype)) {
     fs.unlink(path);
-    return response.render(`articles/new-post`, adaptNewPostPage(request.body));
+    response.redirect(`back`);
   }
 
   try {
@@ -41,39 +57,152 @@ mainRouter.post(`/add`, upload.single(`photo`), async (request, response) => {
   }
 
   const data = {
-    ...request.body,
-    category: []
+    title: body.title,
+    imagePath: originalname,
+    announce: body.announce,
+    fullText: body.fullText,
+    createdDate: body.createdDate || new Date(),
+    categories: body.category || [],
   };
 
-  const headers = {
-    'Content-Type': `application/json`
-  };
+  try {
+    await api.createArticle(data);
+    response.redirect(`/my`);
+  } catch (error) {
+    response.redirect(`back`);
+    logger.error(`client:request End request with error: ${error}`);
+  }
+});
 
-  return getRequest().post(`/articles`, data, {headers})
-    .then(() => {
-      response.redirect(`/my`);
-    })
-    .catch((error) => {
-      response.render(`articles/new-post`, adaptNewPostPage(request.body));
-      logger.error(`client:request End request with error: ${error}`);
+articleRouter.get(`/edit/:id`, async (request, response) => {
+  logger.info(`client:routes End request with status code ${response.statusCode}`);
+  try {
+    const {id} = request.params;
+    const [article, categories] = await Promise.all([
+      api.getArticle(id),
+      api.getCategories()
+    ]);
+    const editAtricleData = {
+      page: `new-post`,
+      isAuth: true,
+      isEdit: true,
+      title: `edit publication`,
+      article,
+      categories
+    };
+    response.render(`articles/new-post`, editAtricleData);
+  } catch (error) {
+    logger.error(`client:request End request with error: ${error}`);
+  }
+});
+
+articleRouter.get(`/categories/:id`, async (request, response) => {
+  logger.info(`client:routes End request with status code ${response.statusCode}`);
+  try {
+    const {id} = request.params;
+    const [articles, categories] = await Promise.all([
+      api.getArticles({comments: true}),
+      api.getCategories(true)
+    ]);
+    const updatedActicles = articles.filter((article) => article.categories.some((category) => category.id === Number(id)));
+    const category = categories.find((categoryItem) => categoryItem.id === Number(id));
+    const updatedCategories = categories.map((categoryElem) => {
+      if (categoryElem.name === category.name) {
+        categoryElem.isActive = true;
+      }
+      return categoryElem;
     });
+    const articlesByCategory = {
+      pageRender: `articles-by-category`,
+      isAuth: true,
+      title: `Публикации по категориям`,
+      categoryTitle: category.name,
+      articles: updatedActicles.map((article) => ({...article, createdDate: datefns.format(new Date(article.createdDate), `dd.MM.yyyy, HH:mm`)})),
+      categories: updatedCategories,
+    };
+    response.render(`articles/articles-by-category`, articlesByCategory);
+  } catch (error) {
+    logger.error(`client:request End request with error: ${error}`);
+  }
 });
 
-mainRouter.get(`/edit/:id`, (request, response) => {
+articleRouter.get(`/:id`, async (request, response) => {
   logger.info(`client:routes End request with status code ${response.statusCode}`);
-  response.render(`articles/new-post`, pageContentEditPost);
+  try {
+    const {id} = request.params;
+
+    const [
+      article,
+      comments
+    ] = await Promise.all([
+      api.getArticle(id),
+      api.getArticleComments(id)
+    ]);
+
+    const articleData = {
+      renderPage: `post`,
+      title: article.title,
+      isAuth: true,
+      article: {
+        ...article,
+        imagePathFull: article.imagePathFull ? article.imagePathFull : `/${article.imagePath}`,
+        createdDate: datefns.format(new Date(article.createdDate), `dd.MM.yyyy, HH:mm`)
+      },
+      comments: comments.filter((comment) => comment.userId).map((comment) => ({...comment, users: {...comment.users, name: `${comment.users.firstname} ${comment.users.lastname}`}, createdDate: datefns.format(new Date(comment.createdAt), `dd.MM.yyyy, HH:mm`)})),
+      categories: article.categories
+    };
+    response.render(`articles/post`, articleData);
+  } catch (error) {
+    logger.error(`client:request End request with error: ${error}`);
+  }
 });
 
-mainRouter.get(`/category/:id`, (request, response) => {
+articleRouter.post(`/:articleId/comments`, async (request, response) => {
   logger.info(`client:routes End request with status code ${response.statusCode}`);
-  response.render(`articles/articles-by-category`, pageContentCategory);
+  const {articleId} = request.params;
+  const {body} = request;
+
+  if (!body.text) {
+    response.redirect(`back`);
+  }
+
+  const data = {
+    text: body.text,
+  };
+
+  try {
+    await api.createComment(data, articleId);
+    response.redirect(`back`);
+  } catch (error) {
+    response.redirect(`back`);
+    logger.error(`client:request End request with error: ${error}`);
+  }
 });
 
-mainRouter.get(`/:id`, (request, response) => {
+articleRouter.post(`/:id/delete`, async (request, response) => {
   logger.info(`client:routes End request with status code ${response.statusCode}`);
-  getRequest().get(`/articles/${request.params.id}`)
-    .then((resp) => response.render(`articles/post`, adaptPostPage(resp.data)))
-    .catch((error) => logger.error(`client:request End request with error: ${error}`));
+  const {id} = request.params;
+
+  try {
+    await api.deleteArticle(id);
+    await response.redirect(`/`);
+  } catch (error) {
+    response.redirect(`back`);
+    logger.error(`client:request End request with error: ${error}`);
+  }
 });
 
-module.exports = mainRouter;
+articleRouter.post(`/:articleId/comments/:commentId`, async (request, response) => {
+  logger.info(`client:routes End request with status code ${response.statusCode}`);
+  const {articleId, commentId} = request.params;
+
+  try {
+    await api.deleteComment(articleId, commentId);
+    await response.redirect(`/`);
+  } catch (error) {
+    response.redirect(`back`);
+    logger.error(`client:request End request with error: ${error}`);
+  }
+});
+
+module.exports = articleRouter;

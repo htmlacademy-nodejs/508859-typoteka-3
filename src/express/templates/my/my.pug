@@ -5,9 +5,10 @@ block content
     section.main-page__notes.notes
       h1.notes__title Мои записи
       ul.notes__list
-        each post in postList
-          li.notes__list-item(class=(postList[postList.length - 1] == post) ? 'notes__list-item--last' : '')
-            time.notes__item-time(datetime='2019-03-21T20:33')=post.datetime
-            a.notes__item-text(href=('/articles/edit/' + post.id))=post.previewText
-            button.notes__button.button.button--close-item(type='button')
+        each article in articles
+          li.notes__list-item(class=(articles[articles.length - 1] == article) ? 'notes__list-item--last' : '')
+            time.notes__item-time(datetime=article.createdAt)=article.createdDate
+            a.notes__item-text(href=('/articles/edit/' + article.id))=article.announce
+            input.article_id(type='hidden', name='article_id', value=article.id)
+            button.notes__button.button.button--close-item.button--article-delete(type='button')
               span.visually-hidden Закрыть строку списка

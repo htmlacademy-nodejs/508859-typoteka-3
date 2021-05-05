@@ -1,6 +1,5 @@
 'use strict';
 
-const FILE_NAME = `mocks.json`;
 const DEFAULT_PORT = 8080;
 const MAX_ID_LENGTH = 6;
 const API_PREFIX = `/api`;
@@ -22,7 +21,6 @@ const HttpCode = {
 
 
 module.exports = {
-  FILE_NAME,
   DEFAULT_PORT,
   MAX_ID_LENGTH,
   API_PREFIX,

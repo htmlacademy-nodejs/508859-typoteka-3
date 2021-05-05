@@ -13,7 +13,7 @@ block content
           each searchElem in searchList
             .search__result
               time.search__date(datetime='2019-03-21T20:33')=searchElem.createdDate
-              a.search__link=searchElem.title
+              a(href="/articles/" + searchElem.id).search__link=searchElem.title
         if !searchList.length
           p.search-page__empty
             | Ничего не нашлось
