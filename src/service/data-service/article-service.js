@@ -31,6 +31,20 @@ class ArticleService {
     return articles.map((item) => item.get());
   }
 
+  async findPage({limit, offset, comments: needComments}) {
+    const include = [Aliase.CATEGORIES];
+    if (needComments) {
+      include.push(Aliase.COMMENTS);
+    }
+    const {count, rows} = await this._Article.findAndCountAll({
+      limit,
+      offset,
+      include,
+      distinct: true
+    });
+    return {count, articles: rows};
+  }
+
   async findOne(id) {
     return await this._Article.findByPk(id, {include: [Aliase.CATEGORIES]});
   }

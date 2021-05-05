@@ -2,32 +2,16 @@
 
 const {Router} = require(`express`);
 const fs = require(`fs`).promises;
-// const path = require(`path`);
 const multer = require(`multer`);
 const datefns = require(`date-fns`);
 
 const upload = multer({dest: `tmp/`});
-
-// const UPLOAD_DIR = `../upload/img/`;
-
-// const uploadDirAbsolute = path.resolve(__dirname, UPLOAD_DIR);
 
 const api = require(`../api`).getAPI();
 const {getLogger} = require(`../../utils/logger`);
 const logger = getLogger();
 
 const articleRouter = new Router();
-
-// const storage = multer.diskStorage({
-//   destination: uploadDirAbsolute,
-//   filename: (req, file, cb) => {
-//     const uniqueName = nanoid(10);
-//     const extension = file.originalname.split(`.`).pop();
-//     cb(null, `${uniqueName}.${extension}`);
-//   }
-// });
-
-// const upload = multer({storage});
 
 articleRouter.get(`/add`, async (request, response) => {
   logger.info(`client:routes End request with status code ${response.statusCode}`);
@@ -120,7 +104,7 @@ articleRouter.get(`/categories/:id`, async (request, response) => {
       api.getArticles({comments: true}),
       api.getCategories(true)
     ]);
-    const updatedActicles = articles.articles.filter((article) => article.categories.some((category) => category.id === Number(id)));
+    const updatedActicles = articles.filter((article) => article.categories.some((category) => category.id === Number(id)));
     const category = categories.find((categoryItem) => categoryItem.id === Number(id));
     const updatedCategories = categories.map((categoryElem) => {
       if (categoryElem.name === category.name) {
@@ -133,7 +117,7 @@ articleRouter.get(`/categories/:id`, async (request, response) => {
       isAuth: true,
       title: `Публикации по категориям`,
       categoryTitle: category.name,
-      articles: updatedActicles,
+      articles: updatedActicles.map((article) => ({...article, createdDate: datefns.format(new Date(article.createdDate), `dd.MM.yyyy, HH:mm`)})),
       categories: updatedCategories,
     };
     response.render(`articles/articles-by-category`, articlesByCategory);

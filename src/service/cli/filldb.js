@@ -54,6 +54,11 @@ const CategoryCount = {
   MAX: 5
 };
 
+const UserIdNumber = {
+  MIN: 1,
+  MAX: 5
+};
+
 const readContent = async (filePath) => {
   try {
     const content = await fs.readFile(filePath, `utf8`);
@@ -76,6 +81,7 @@ const generateArticles = (count, titles, sentences, randomImage, categories, com
     imagePathFull: randomImage.fullImg,
     categories: getRandomSubarray(categories.slice(CategoryCount.MIN, CategoryCount.MAX)),
     comments: generateComments(getRandomInt(CommentCount.MIN, CommentCount.MAX), comments),
+    userId: getRandomInt(UserIdNumber.MIN, UserIdNumber.MAX)
   }))
 );
 
@@ -84,6 +90,7 @@ const generateComments = (count, comments) => (
     text: shuffleElements(comments)
       .slice(CommentTextCount.MIN, getRandomInt(CommentTextCount.MIN, CommentTextCount.MAX))
       .join(` `),
+    userId: getRandomInt(UserIdNumber.MIN, UserIdNumber.MAX)
   }))
 );
 

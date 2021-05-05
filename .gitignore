@@ -14,7 +14,6 @@ node_modules/
 # Папка с собранными файлами проекта
 build/
 
-mocks.json
 requests.http
 .env
 /src/service/logs

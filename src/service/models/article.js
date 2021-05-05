@@ -27,7 +27,7 @@ const define = (sequelize) => Article.init({
   },
   fullText: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: true
   }
 }, {
   sequelize,

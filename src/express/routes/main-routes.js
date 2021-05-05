@@ -7,11 +7,6 @@ const api = require(`../api`).getAPI();
 const {getLogger} = require(`../../utils/logger`);
 const logger = getLogger();
 
-const {
-  // adaptMainPage,
-  adaptSearchPage
-} = require(`../adapters`);
-
 const ARTICLES_PER_PAGE = 8;
 
 const mainRouter = new Router();
@@ -35,7 +30,6 @@ mainRouter.get(`/`, async (request, response) => {
     ]);
     const totalPages = Math.ceil(count / ARTICLES_PER_PAGE);
 
-    // const comments = articles.map((article) => article.comments).flat();
     const lastComments = comments.filter((comment) => comment.users).sort((prev, next) => +new Date(next.createdAt) - +new Date(prev.createdAt)).slice(0, 4);
     const mainData = {
       isAuth: true,
@@ -83,7 +77,14 @@ mainRouter.get(`/login`, (request, response) => {
 
 mainRouter.get(`/search`, (request, response) => {
   logger.info(`client:routes End request with status code ${response.statusCode}`);
-  response.render(`search`, adaptSearchPage([]));
+  const searchData = {
+    page: `search`,
+    isAuth: true,
+    title: `Типотека`,
+    searchWord: ``,
+    searchList: []
+  };
+  response.render(`search`, searchData);
 });
 
 mainRouter.get(`/search/results`, async (request, response) => {

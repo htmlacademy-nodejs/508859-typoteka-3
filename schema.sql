@@ -22,7 +22,7 @@ CREATE TABLE users
   firstname VARCHAR(100) NOT NULL,
   lastname VARCHAR(100) NOT NULL,
   pass VARCHAR(100) NOT NULL,
-  avatar_path VARCHAR(255) NOT NULL
+  avatarPath VARCHAR(255) NOT NULL
 );
 
 CREATE UNIQUE INDEX user_unique_ind ON users (email, firstname, lastname);
@@ -31,37 +31,37 @@ CREATE UNIQUE INDEX user_unique_ind ON users (email, firstname, lastname);
 CREATE TABLE comments
 (
   id SERIAL PRIMARY KEY,
-  user_id INTEGER NOT NULL,
-  article_id INTEGER NOT NULL,
-  comment_date DATE NOT NULL,
-  comment_text VARCHAR(1000),
-  FOREIGN KEY (user_id) REFERENCES users (id)
+  userId INTEGER NOT NULL,
+  articleId INTEGER NOT NULL,
+  text VARCHAR(1000),
+  FOREIGN KEY (userId) REFERENCES users (id)
 		ON DELETE SET NULL
 		ON UPDATE SET NULL,
-  FOREIGN KEY (article_id) REFERENCES articles (id)
+  FOREIGN KEY (articleId) REFERENCES articles (id)
 		ON DELETE SET NULL
 		ON UPDATE SET NULL
 );
 
-CREATE INDEX comments_search_ind ON comments (comment_text);
+CREATE INDEX comments_search_ind ON comments (text);
 
 CREATE TABLE categories
 (
   id SERIAL PRIMARY KEY,
-  category_name VARCHAR(16) NOT NULL
+  name VARCHAR(16) NOT NULL
 );
 
-CREATE INDEX category_search_ind ON categories (category_name);
+CREATE INDEX category_search_ind ON categories (name);
 
 CREATE TABLE articles
 (
   id SERIAL PRIMARY KEY,
-  user_id INTEGER NOT NULL,
+  userId INTEGER NOT NULL,
   title VARCHAR(250) NOT NULL,
-  created_date DATE NOT NULL,
-  image_path VARCHAR(255) NOT NULL,
+  createdDate DATE NOT NULL,
+  imagePath VARCHAR(255) NOT NULL,
+  imagePathFull VARCHAR(255),
   announce VARCHAR(500) NOT NULL,
-  full_text VARCHAR(2000) NOT NULL,
+  fullText VARCHAR(2000) NOT NULL,
   FOREIGN KEY (user_id) REFERENCES users (id)
 		ON DELETE SET NULL
 		ON UPDATE SET NULL
@@ -72,13 +72,13 @@ CREATE INDEX articles_search_ind ON articles (title);
 
 CREATE TABLE articles_categories
 (
-  article_id INTEGER NOT NULL,
-  category_id INTEGER NOT NULL,
-	CONSTRAINT articles_categories_pk PRIMARY KEY (article_id, category_id),
-  FOREIGN KEY (article_id) REFERENCES articles (id)
+  articleId INTEGER NOT NULL,
+  categoryId INTEGER NOT NULL,
+	CONSTRAINT articles_categories_pk PRIMARY KEY (articleId, categoryId),
+  FOREIGN KEY (articleId) REFERENCES articles (id)
 		ON DELETE SET NULL
 		ON UPDATE CASCADE,
-	FOREIGN KEY (category_id) REFERENCES categories (id)
+	FOREIGN KEY (categoryId) REFERENCES categories (id)
 		ON DELETE SET NULL
 		ON UPDATE CASCADE
 );

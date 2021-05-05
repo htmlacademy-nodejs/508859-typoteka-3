@@ -11,6 +11,17 @@ module.exports = async (sequelize, {categories, articles, users}) => {
   } = defineModels(sequelize);
   await sequelize.sync({force: true});
 
+  await User.bulkCreate(
+      users.map((item) => ({email: item.email,
+        firstname: item.firstname,
+        lastname: item.lastname,
+        pass: item.pass,
+        avatarPath: item.avatarPath}))
+  );
+
+  // const userPromises = users.map(async (user) => await User.create(user));
+  // await Promise.all(userPromises);
+
   const categoryModels = await Category.bulkCreate(
       categories.map((item) => ({name: item}))
   );
@@ -21,18 +32,11 @@ module.exports = async (sequelize, {categories, articles, users}) => {
   }), {});
 
   const articlePromises = articles.map(async (article) => {
-    const articleModel = await Article.create(article, {include: [Aliase.COMMENTS]});
+    const articleModel = await Article.create(article, {include: [Aliase.COMMENTS, Aliase.USERS]});
     await articleModel.addCategories(article.categories.map(
         (name) => categoryIdByName[name]
     ));
   });
   await Promise.all(articlePromises);
-  await User.bulkCreate(
-      users.map((item) => ({email: item.email,
-        firstname: item.firstname,
-        lastname: item.lastname,
-        pass: item.pass,
-        avatarPath: item.avatarPath}))
-  );
 
 };

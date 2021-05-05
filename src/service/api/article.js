@@ -48,10 +48,15 @@ module.exports = (app, articleService, commentService) => {
   });
 
   route.get(`/`, async (request, response) => {
-    const {comments} = request.query;
-    const articles = await articleService.findAll(comments);
+    const {offset, limit, comments} = request.query;
+    let result;
+    if (limit || offset) {
+      result = await articleService.findPage({limit, offset, comments});
+    } else {
+      result = await articleService.findAll(comments);
+    }
 
-    if (!articles) {
+    if (!result) {
       logger.error(`server:api Not found articles`);
       return response.status(HttpCode.NOT_FOUND)
         .send(`Not found articles`);
@@ -59,7 +64,7 @@ module.exports = (app, articleService, commentService) => {
 
     logger.info(`server:api Get articles`);
     return response.status(HttpCode.OK)
-      .json({articles, count: articles.length});
+      .json(result);
   });
 
   route.put(`/:articleId`, articleValidator, async (request, response) => {

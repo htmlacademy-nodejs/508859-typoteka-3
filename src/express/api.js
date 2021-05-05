@@ -31,8 +31,6 @@ class Api {
   }
 
   getArticle(id) {
-    // comments
-    // {params: {comments}}
     return this._load(`/articles/${id}`);
   }
 

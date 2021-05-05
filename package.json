@@ -5,7 +5,7 @@
   "main": "./src/service/service.js",
   "scripts": {
     "eslint": "eslint --ext .js src/",
-    "filldb": "cross-env LOG_LEVEL=info nodemon -r dotenv/config ./src/service/service.js --filldb 10",
+    "filldb": "cross-env LOG_LEVEL=info nodemon -r dotenv/config ./src/service/service.js --filldb 20",
     "start": "cross-env LOG_LEVEL=error node -r dotenv/config ./src/service/service.js --server",
     "start::debug": "cross-env LOG_LEVEL=debug node -r dotenv/config ./src/service/service.js --server | pino-pretty > ./src/service/logs/service-app.log",
     "start::dev": "cross-env LOG_LEVEL=info nodemon -r dotenv/config ./src/service/service.js --server",
